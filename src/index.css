@@ -47,6 +47,93 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+input:focus {
+  outline: none;
+}
+
+select:focus {
+  outline: none;
+}
+
+[contentEditable]:focus {
+  outline: none;
+  border: 1px solid rgb(196, 189, 189);
+}
+
 #app {
   height: 100vh;
+}
+
+.bgfadeWhite {
+  background-color: #f1f1f1bf;
+}
+
+.modal {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--vt-c-black);
+  opacity: 0.9;
+  animation: fade 1s ease-in-out;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0.9;
+  }
+}
+
+[draggable] {
+  cursor: all-scroll;
+}
+
+[data-dropzone] button {
+  cursor: pointer !important;
+}
+
+[data-dropzone] h1 {
+  cursor: auto !important;
+}
+
+[data-select] {
+  appearance: none;
+}
+
+[data-dropzone] [data-select] {
+  appearance: auto;
+  cursor: pointer;
+}
+
+select:disabled {
+  opacity: 1 !important;
+}
+
+input:disabled {
+  background-color: transparent;
+}
+
+textarea:disabled {
+  background-color: transparent;
+  resize: none;
+}
+
+[draggable] input::placeholder {
+  opacity: 1;
+  color: black;
+}
+
+[draggable] textarea::placeholder {
+  opacity: 1;
+  color: black;
+}
+
+.icons {
+  color: black;
 }
