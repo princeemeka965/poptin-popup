@@ -20,14 +20,14 @@ function initiateDrag(ev) {
     <!--- Display list of Html Elements that can be dragged to the popup-->
     <div class="my-2 p-2 border border-dashed">
       <div class="w-full" @dragstart="initiateDrag($event)">
-        <h1 class="font-bold text-black w-full" data-text data-header draggable="true">Header</h1>
+        <h1 class="font-bold text-black w-full p-2" data-text data-header draggable="true">Header</h1>
       </div>
     </div>
 
     <div class="my-2 p-2 border border-dashed">
       <div class="w-full" @dragstart="initiateDrag($event)">
         <input
-          class="font-bold text-black w-full"
+          class="font-bold text-black w-full p-2"
           data-text
           disabled
           draggable="true"
@@ -38,14 +38,14 @@ function initiateDrag(ev) {
 
     <div class="my-2 p-2 border border-dashed">
       <div class="w-full" @dragstart="initiateDrag($event)">
-        <button class="font-bold text-black w-full" data-text draggable="true">Button</button>
+        <button class="font-bold text-black w-full p-2" data-text draggable="true">Button</button>
       </div>
     </div>
 
     <div class="my-2 p-2 border border-dashed">
       <div class="w-full" @dragstart="initiateDrag($event)">
         <select
-          class="font-bold text-black w-full"
+          class="font-bold text-black w-full p-2"
           style="width: 100%"
           data-text
           data-select
@@ -60,7 +60,7 @@ function initiateDrag(ev) {
     <div class="my-2 p-2 border border-dashed">
       <div class="w-full" @dragstart="initiateDrag($event)">
         <input
-          class="font-bold text-black w-full"
+          class="font-bold text-black w-full p-2"
           data-text
           disabled
           draggable="true"
@@ -74,7 +74,7 @@ function initiateDrag(ev) {
     <div class="my-2 p-2 border border-dashed">
       <div class="w-full" @dragstart="initiateDrag($event)">
         <input
-          class="font-bold text-black w-full"
+          class="font-bold text-black w-full p-2"
           data-text
           disabled
           draggable="true"
@@ -88,7 +88,7 @@ function initiateDrag(ev) {
     <div class="my-2 p-2 border border-dashed">
       <div class="w-full" @dragstart="initiateDrag($event)">
         <textarea
-          class="font-bold text-black w-full"
+          class="font-bold text-black w-full p-2"
           data-text
           disabled
           draggable="true"

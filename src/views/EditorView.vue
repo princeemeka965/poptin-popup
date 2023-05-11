@@ -1,42 +1,44 @@
 <script>
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import EditorMenu from '../components/EditorMenu.vue'
 import TextFormatEditor from '../components/TextFormatEditor.vue'
 import SelectModal from '../components/SelectModal.vue'
+import ContextMenu from '../components/ContextMenu.vue'
 
 export default {
-  components: { TextFormatEditor, EditorMenu, SelectModal },
+  components: { TextFormatEditor, EditorMenu, SelectModal, ContextMenu },
   setup() {
     const draggedElem = ref(null)
-    const nodeElem = ref(null);
-    const hitSelect = ref(null);
+    const nodeElem = ref(null)
+    const hitSelect = ref(null)
+    const contextMenu = ref(false)
+    let targetElemPosition = reactive({ value: [] })
 
     const allowDrop = (event) => {
       event.preventDefault()
     }
 
     const drop = (event) => {
-      event.preventDefault();
+      event.preventDefault()
 
       // Create a div that will house our dragged Item
       // Style the div element
-      const divElem = document.createElement('div');
-      divElem.classList.add('p-2');
-      divElem.setAttribute('data-text', '');
+      const divElem = document.createElement('div')
+      divElem.setAttribute('data-text', '')
 
       // Append the dragged element to the div
-      divElem.appendChild(draggedElem.value.cloneNode(true));
+      divElem.appendChild(draggedElem.value.cloneNode(true))
 
       // Append the div to our dropzone
       event.target.appendChild(divElem)
 
-      const domLength = event.target.querySelectorAll('[data-text]').length;
+      const domLength = event.target.querySelectorAll('[data-text]').length
 
-      const mediaLength = event.target.querySelectorAll('img').length;
+      const mediaLength = event.target.querySelectorAll('img').length
 
-      const currentIndex = domLength - 1;
+      const currentIndex = domLength - 1
 
-      const currentMedia = mediaLength - 1;
+      const currentMedia = mediaLength - 1
 
       if (draggedElem.value.disabled) {
         event.target.querySelectorAll('[data-text]')[currentIndex].removeAttribute('disabled')
@@ -48,34 +50,80 @@ export default {
         event.target.querySelectorAll('[data-text]')[currentIndex].style.width = 'fit-content'
 
         event.target.querySelectorAll('[data-text]')[currentIndex].onclick = function () {
-          nodeElem.value = event.target.querySelectorAll('[data-text]')[currentIndex];
+          nodeElem.value = event.target.querySelectorAll('[data-text]')[currentIndex]
+          targetElemPosition.value = [
+            {
+              x: Math.ceil(nodeElem.value.getBoundingClientRect().left),
+              y: Math.ceil(nodeElem.value.getBoundingClientRect().top)
+            }
+          ]
+          contextMenu.value = true
         }
       }
 
       if (draggedElem.value.attributes.media) {
-        event.target.querySelectorAll('img')[currentMedia].style.width = `${draggedElem.value.clientWidth}px`
+        event.target.querySelectorAll('img')[
+          currentMedia
+        ].style.width = `${draggedElem.value.clientWidth}px`
+        event.target.querySelectorAll('img')[currentMedia].removeAttribute('draggable')
+        event.target.querySelectorAll('[data-text]')[currentIndex].onclick = function () {
+          nodeElem.value = event.target.querySelectorAll('img')[currentMedia]
+          targetElemPosition.value = [
+            {
+              x: Math.ceil(nodeElem.value.getBoundingClientRect().left),
+              y: Math.ceil(nodeElem.value.getBoundingClientRect().top)
+            }
+          ]
+          contextMenu.value = true
+        }
       }
 
-      if ((!draggedElem.value.disabled) && (!draggedElem.value.attributes.media)) {
+      if (!draggedElem.value.disabled && !draggedElem.value.attributes.media) {
         // Add basic css class for styling
         event.target.querySelectorAll('[data-text]')[currentIndex].removeAttribute('draggable')
         event.target.querySelectorAll('[data-text]')[currentIndex].setAttribute('tabIndex', 0)
         // check for headers and make them editable
-        if (event.target.querySelectorAll('[data-text]')[currentIndex].hasAttribute('data-header')) {
-          event.target.querySelectorAll('[data-text]')[currentIndex].setAttribute('contentEditable', true)
+        if (
+          event.target.querySelectorAll('[data-text]')[currentIndex].hasAttribute('data-header')
+        ) {
+          event.target
+            .querySelectorAll('[data-text]')
+            [currentIndex].setAttribute('contentEditable', true)
         }
 
         event.target.querySelectorAll('[data-text]')[currentIndex].onclick = function () {
-          nodeElem.value = event.target.querySelectorAll('[data-text]')[currentIndex];
+          nodeElem.value = event.target.querySelectorAll('[data-text]')[currentIndex]
+          targetElemPosition.value = [
+            {
+              x: Math.ceil(nodeElem.value.getBoundingClientRect().left),
+              y: Math.ceil(nodeElem.value.getBoundingClientRect().top)
+            }
+          ]
+          contextMenu.value = true
         }
       }
 
-      event.target.querySelectorAll('[data-select]')[currentIndex].onclick = function () {
-        nodeElem.value = event.target.querySelectorAll('[data-select]')[currentIndex];
-        if (event.target.querySelectorAll('[data-select]')[currentIndex].options.length <= 1) {
-          hitSelect.value = true;
+      // check for select Input field
+      if (event.target.querySelectorAll('[data-text]')[currentIndex].hasAttribute('data-select')) {
+        event.target.querySelectorAll('[data-select]')[currentIndex - 1].onclick = function () {
+          nodeElem.value = event.target.querySelectorAll('[data-select]')[currentIndex - 1]
+          if (event.target.querySelectorAll('[data-select]')[currentIndex - 1].options.length <= 1) {
+            hitSelect.value = true
+          }
+          targetElemPosition.value = [
+            {
+              x: Math.ceil(nodeElem.value.getBoundingClientRect().left),
+              y: Math.ceil(nodeElem.value.getBoundingClientRect().top)
+            }
+          ]
+          contextMenu.value = true
         }
       }
+    }
+
+    const closeContext = () => {
+      contextMenu.value = false
+      targetElemPosition.value = []
     }
 
     return {
@@ -83,7 +131,10 @@ export default {
       drop,
       draggedElem,
       nodeElem,
-      hitSelect
+      hitSelect,
+      contextMenu,
+      targetElemPosition,
+      closeContext
     }
   }
 }
@@ -118,6 +169,18 @@ export default {
       </div>
     </section>
 
-    <select-modal :active-node="nodeElem" :open="hitSelect" v-if="hitSelect" @closeSelect="hitSelect = false" />
+    <select-modal
+      :active-node="nodeElem"
+      :open="hitSelect"
+      v-if="hitSelect"
+      @closeSelect="hitSelect = false"
+    />
+
+    <context-menu
+      :active-node="nodeElem"
+      :open="contextMenu"
+      :position="targetElemPosition"
+      @closeContext="closeContext"
+    />
   </div>
 </template>

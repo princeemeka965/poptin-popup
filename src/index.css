@@ -103,8 +103,17 @@ button {
   cursor: pointer !important;
 }
 
-[data-dropzone] div:hover {
-  border: 1px dashed #f1f1f1;
+[data-dropzone] h1:focus {
+  border: 2px dashed #f1f1f1;
+}
+
+[data-dropzone] button {
+  border: 1px solid #f1f1f1;
+  width: auto !important;
+}
+
+[data-dropzone] input {
+  border: 1px solid grey;
 }
 
 [data-dropzone] h1 {

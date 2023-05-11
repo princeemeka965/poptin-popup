@@ -1,8 +1,4 @@
 <script setup>
-const props = defineProps({
-  activeNode: Object,
-})
-
 function colorPallete() {
   document.getElementById('color').click();
 }
@@ -24,11 +20,6 @@ function executeColor(cmd, color) {
   console.log(color.target.value)
 document.execCommand(cmd, false, color.target.value)
 }
-
-function componentDelete() {
- document.querySelector('[data-dropzone]').removeChild(props.activeNode.parentNode);
-}
-
 </script>
 
 <template>
@@ -210,20 +201,6 @@ function componentDelete() {
             />
           </span>
         </div>
-
-        <div class="box">
-          <span
-            class="editor-btn icon"
-            data-action="delete"
-            title="Delete Component"
-            @click="componentDelete"
-          >
-            <img
-              src="https://img.icons8.com/material-outlined/24/null/add-trash.png"
-            />
-          </span>
-        </div>
-
       </div>
     </div>
   </div>
