@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue';
-import EditorComponents from './EditorComponents.vue'
-import EditorStyles from './EditorStyles.vue';
+import EditorComponents from './EditorComponents.vue';
+import editorStyles from './EditorStyles.vue';
+import EditorMedia from './EditorMedia.vue';
 
 const active = ref('component');
 const emit = defineEmits(['selectedElem'])
@@ -52,6 +53,7 @@ function setDraggedElem(elem) {
     <div class="w-full flex flex-col">
         <editor-components v-if="active === 'component'" @initiateDrag="setDraggedElem($event)" />
         <editor-styles v-if="active === 'styles'" />
+        <editor-media v-if="active === 'media'" @initiateDrag="setDraggedElem($event)" />
     </div>
 
   </div>

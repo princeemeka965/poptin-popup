@@ -96,6 +96,10 @@ select:focus {
   cursor: all-scroll;
 }
 
+button {
+  text-align: left;
+}
+
 [data-dropzone] button {
   cursor: pointer !important;
 }
@@ -126,16 +130,24 @@ textarea:disabled {
   resize: none;
 }
 
-[draggable] input::placeholder {
-  opacity: 1;
-  color: black;
-}
-
-[draggable] textarea::placeholder {
+[draggable]::placeholder {
   opacity: 1;
   color: black;
 }
 
 .icons {
   color: black;
+}
+
+ol li {
+  list-style: auto !important;
+}
+
+ul li {
+  list-style-type: disc !important;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: underline;
 }

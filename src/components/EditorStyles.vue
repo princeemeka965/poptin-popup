@@ -5,7 +5,7 @@ import { ref } from 'vue'
 
 const fontWeight = ref(0)
 const fontSize = ref(0)
-const arrayOfObjects = ref([
+const arrayOfColors = ref([
   {
   name: '#F0F8FF'
   },
@@ -40,13 +40,50 @@ const arrayOfObjects = ref([
     name: '#D2691E'
   }
 ])
-const object = ref({
+const colors = ref({
   name: '#F0F8FF'
 });
 
 function updateBgColor(data) {
-  object.value = data;
+  colors.value = data;
 }
+
+const arrayOfFonts = ref([
+  {
+  name: 'Arial'
+  },
+  {
+  name: 'Helvetica'
+  },
+  {
+    name: "Verdana"
+  },
+  {
+    name: 'Calibri'
+  },
+  {
+    name: 'Lucida Sans'
+  },
+  {
+    name: 'Segoe UI'
+  },
+  {
+    name: 'Roboto'
+  },
+  {
+    name: 'Trebuchet MS'
+  },
+  {
+    name: 'Lucida Console'
+  }
+])
+const fontFamily = ref({
+  name: 'Arial'
+});
+function updateFont(data) {
+  fontFamily.value = data;
+}
+
 </script>
 
 <template>
@@ -108,6 +145,56 @@ function updateBgColor(data) {
     <div class="w-full flex mt-5 mb-2 p-1">
       <div class="flex w-1/3">
         <div class="flex flex-col justify-center">
+          <span class="font-semibold text-base flex flex-grow text-black">Font Family</span>
+        </div>
+      </div>
+      <div class="flex w-1/3">
+        <dropdown
+          class="my-dropdown-toggle"
+          :options="arrayOfFonts"
+          :selected="fontFamily"
+          v-on:updateOption="updateFont($event)"
+          :placeholder="'Select an Item'"
+          :closeOnOutsideClick="boolean"
+        >
+        </dropdown>
+      </div>
+      <div class="flex flex-grow ml-3">
+        <div class="flex flex-col justify-center">
+          <span class="h-8 font-bold py-2 px-3 -mt-1 text-black text-sm" :style="`font-family: ${fontFamily.name} !important`">
+            Poptin</span>
+        </div>
+        </div>
+    </div>
+
+    <div class="w-full flex mt-5 mb-2 p-1">
+      <div class="flex w-1/3">
+        <div class="flex flex-col justify-center">
+          <span class="font-semibold text-base flex flex-grow text-black">Background</span>
+        </div>
+      </div>
+
+      <div class="flex w-1/3">
+        <dropdown
+          class="my-dropdown-toggle"
+          :options="arrayOfColors"
+          :selected="colors"
+          v-on:updateOption="updateBgColor($event)"
+          :placeholder="'Select an Item'"
+          :closeOnOutsideClick="boolean"
+        >
+        </dropdown>
+      </div>
+      <div class="flex flex-grow ml-3">
+        <div class="flex flex-col justify-center">
+          <span class="p-3 border -mt-1" :style="`background-color: ${colors.name}`"></span>
+        </div>
+        </div>
+    </div>
+
+    <div class="w-full flex mt-5 mb-2 p-1">
+      <div class="flex w-1/3">
+        <div class="flex flex-col justify-center">
           <span class="font-semibold text-base flex flex-grow text-black">Width</span>
         </div>
       </div>
@@ -144,31 +231,6 @@ function updateBgColor(data) {
         </div>
       </div>
     </div>
-
-    <div class="w-full flex mt-5 mb-2 p-1">
-      <div class="flex w-1/3">
-        <div class="flex flex-col justify-center">
-          <span class="font-semibold text-base flex flex-grow text-black">Background</span>
-        </div>
-      </div>
-
-      <div class="flex w-1/3">
-        <dropdown
-          class="my-dropdown-toggle"
-          :options="arrayOfObjects"
-          :selected="object"
-          v-on:updateOption="updateBgColor($event)"
-          :placeholder="'Select an Item'"
-          :closeOnOutsideClick="boolean"
-        >
-        </dropdown>
-      </div>
-      <div class="flex flex-grow ml-3">
-        <div class="flex flex-col justify-center">
-          <span class="p-3 border -mt-1" :style="`background-color: ${object.name}`"></span>
-        </div>
-        </div>
-    </div>
   </div>
 </template>
 
@@ -181,7 +243,7 @@ function updateBgColor(data) {
   border: 1px solid rgb(223, 212, 212);
   background: none !important;
   border-radius: 0.375rem;
-  padding: 0.25rem !important;
+  padding: 0.5rem !important;
   font-weight: 400;
 }
 .btn-group {

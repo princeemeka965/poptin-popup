@@ -6,34 +6,95 @@ export default {
   components: { TextFormatEditor, EditorMenu },
   setup() {
     const draggedElem = ref(null)
+    const nodeElem = ref(null)
 
     const allowDrop = (event) => {
       event.preventDefault()
     }
 
     const drop = (event) => {
-      event.preventDefault();
-      event.target.appendChild(draggedElem.value.cloneNode(true));
+      event.preventDefault()
+      event.target.appendChild(draggedElem.value.cloneNode(true))
 
-      const domLength = document.querySelector('[data-dropzone]').querySelectorAll('[data-text]').length;
+      const domLength = document
+        .querySelector('[data-dropzone]')
+        .querySelectorAll('[data-text]').length
 
       if (draggedElem.value.disabled) {
         for (let i = 0; i < domLength; i++) {
-          document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i].removeAttribute('disabled')
+          document
+            .querySelector('[data-dropzone]')
+            .querySelectorAll('[data-text]')
+            [i].removeAttribute('disabled')
+          document
+            .querySelector('[data-dropzone]')
+            .querySelectorAll('[data-text]')
+            [i].removeAttribute('draggable')
+          document
+            .querySelector('[data-dropzone]')
+            .querySelectorAll('[data-text]')
+            [i].setAttribute('tabIndex', 0)
           // Add basic css class for styling
-          document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i].classList.add('p-2');
-          document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i].classList.add('border');
+          document
+            .querySelector('[data-dropzone]')
+            .querySelectorAll('[data-text]')
+            [i].classList.add('p-2')
+          document
+            .querySelector('[data-dropzone]')
+            .querySelectorAll('[data-text]')
+          [i].classList.add('border')
+
+          document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i].onclick =
+            function () {
+                nodeElem.value = document
+                  .querySelector('[data-dropzone]')
+                  .querySelectorAll('[data-text]')[i]
+            }
         }
-      }
-      else {
+      } else {
         for (let i = 0; i < domLength; i++) {
           // Add basic css class for styling
-          document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i].classList.add('p-2');
-
+          document
+            .querySelector('[data-dropzone]')
+            .querySelectorAll('[data-text]')
+            [i].classList.add('p-2')
+          document
+            .querySelector('[data-dropzone]')
+            .querySelectorAll('[data-text]')
+            [i].removeAttribute('draggable')
+          document
+            .querySelector('[data-dropzone]')
+            .querySelectorAll('[data-text]')
+            [i].setAttribute('tabIndex', 0)
           // check for headers and make them editable
-          if (document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i].hasAttribute('data-header')) {
-            document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i].setAttribute('contentEditable', true)
+          if (
+            document
+              .querySelector('[data-dropzone]')
+              .querySelectorAll('[data-text]')
+              [i].hasAttribute('data-header')
+          ) {
+            document
+              .querySelector('[data-dropzone]')
+              .querySelectorAll('[data-text]')
+              [i].setAttribute('contentEditable', true)
           }
+          document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i].onclick =
+            function () {
+              if (
+                !document
+                  .querySelector('[data-dropzone]')
+                  .querySelectorAll('[data-text]')
+                [i].hasAttribute('data-header')
+              ) {
+                document
+                  .querySelector('[data-dropzone]')
+                  .querySelectorAll('[data-text]')
+                [i].classList.add('border')
+              }
+                nodeElem.value = document
+                  .querySelector('[data-dropzone]')
+                  .querySelectorAll('[data-text]')[i]
+            }
         }
       }
     }
@@ -41,7 +102,8 @@ export default {
     return {
       allowDrop,
       drop,
-      draggedElem
+      draggedElem,
+      nodeElem
     }
   }
 }
@@ -60,15 +122,14 @@ export default {
         <!--- Section for the canvas -->
 
         <div class="lg:w-2/3 flex w-full flex-col lg:mx-3">
-          <text-format-editor />
+          <text-format-editor :active-node="nodeElem" />
 
           <div
             class="w-full flex flex-grow border border-dashed flex-col p-5 my-2"
             @drop="drop($event)"
             @dragover="allowDrop($event)"
             data-dropzone
-          >
-        </div>
+          ></div>
         </div>
 
         <div class="lg:w-1/3 w-full flex flex-col p-2 poptin-editor">
