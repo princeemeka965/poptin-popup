@@ -59,7 +59,6 @@ select:focus {
 
 [contentEditable]:focus {
   outline: none;
-  border: 1px solid rgb(196, 189, 189);
 }
 
 #app {
@@ -102,6 +101,10 @@ button {
 
 [data-dropzone] button {
   cursor: pointer !important;
+}
+
+[data-dropzone] div:hover {
+  border: 1px dashed #f1f1f1;
 }
 
 [data-dropzone] h1 {

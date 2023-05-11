@@ -26,7 +26,7 @@ document.execCommand(cmd, false, color.target.value)
 }
 
 function componentDelete() {
-  document.querySelector('[data-dropzone]').removeChild(props.activeNode);
+ document.querySelector('[data-dropzone]').removeChild(props.activeNode.parentNode);
 }
 
 </script>

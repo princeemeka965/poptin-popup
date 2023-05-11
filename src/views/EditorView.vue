@@ -2,99 +2,78 @@
 import { ref } from 'vue'
 import EditorMenu from '../components/EditorMenu.vue'
 import TextFormatEditor from '../components/TextFormatEditor.vue'
+import SelectModal from '../components/SelectModal.vue'
+
 export default {
-  components: { TextFormatEditor, EditorMenu },
+  components: { TextFormatEditor, EditorMenu, SelectModal },
   setup() {
     const draggedElem = ref(null)
-    const nodeElem = ref(null)
+    const nodeElem = ref(null);
+    const hitSelect = ref(null);
 
     const allowDrop = (event) => {
       event.preventDefault()
     }
 
     const drop = (event) => {
-      event.preventDefault()
-      event.target.appendChild(draggedElem.value.cloneNode(true))
+      event.preventDefault();
 
-      const domLength = document
-        .querySelector('[data-dropzone]')
-        .querySelectorAll('[data-text]').length
+      // Create a div that will house our dragged Item
+      // Style the div element
+      const divElem = document.createElement('div');
+      divElem.classList.add('p-2');
+      divElem.setAttribute('data-text', '');
+
+      // Append the dragged element to the div
+      divElem.appendChild(draggedElem.value.cloneNode(true));
+
+      // Append the div to our dropzone
+      event.target.appendChild(divElem)
+
+      const domLength = event.target.querySelectorAll('[data-text]').length;
+
+      const mediaLength = event.target.querySelectorAll('img').length;
+
+      const currentIndex = domLength - 1;
+
+      const currentMedia = mediaLength - 1;
 
       if (draggedElem.value.disabled) {
-        for (let i = 0; i < domLength; i++) {
-          document
-            .querySelector('[data-dropzone]')
-            .querySelectorAll('[data-text]')
-            [i].removeAttribute('disabled')
-          document
-            .querySelector('[data-dropzone]')
-            .querySelectorAll('[data-text]')
-            [i].removeAttribute('draggable')
-          document
-            .querySelector('[data-dropzone]')
-            .querySelectorAll('[data-text]')
-            [i].setAttribute('tabIndex', 0)
-          // Add basic css class for styling
-          document
-            .querySelector('[data-dropzone]')
-            .querySelectorAll('[data-text]')
-            [i].classList.add('p-2')
-          document
-            .querySelector('[data-dropzone]')
-            .querySelectorAll('[data-text]')
-          [i].classList.add('border')
+        event.target.querySelectorAll('[data-text]')[currentIndex].removeAttribute('disabled')
+        event.target.querySelectorAll('[data-text]')[currentIndex].removeAttribute('draggable')
+        event.target.querySelectorAll('[data-text]')[currentIndex].setAttribute('tabIndex', 0)
 
-          document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i].onclick =
-            function () {
-                nodeElem.value = document
-                  .querySelector('[data-dropzone]')
-                  .querySelectorAll('[data-text]')[i]
-            }
+        // Add basic css class for styling
+        event.target.querySelectorAll('[data-text]')[currentIndex].classList.add('p-2')
+        event.target.querySelectorAll('[data-text]')[currentIndex].style.width = 'fit-content'
+
+        event.target.querySelectorAll('[data-text]')[currentIndex].onclick = function () {
+          nodeElem.value = event.target.querySelectorAll('[data-text]')[currentIndex];
         }
-      } else {
-        for (let i = 0; i < domLength; i++) {
-          // Add basic css class for styling
-          document
-            .querySelector('[data-dropzone]')
-            .querySelectorAll('[data-text]')
-            [i].classList.add('p-2')
-          document
-            .querySelector('[data-dropzone]')
-            .querySelectorAll('[data-text]')
-            [i].removeAttribute('draggable')
-          document
-            .querySelector('[data-dropzone]')
-            .querySelectorAll('[data-text]')
-            [i].setAttribute('tabIndex', 0)
-          // check for headers and make them editable
-          if (
-            document
-              .querySelector('[data-dropzone]')
-              .querySelectorAll('[data-text]')
-              [i].hasAttribute('data-header')
-          ) {
-            document
-              .querySelector('[data-dropzone]')
-              .querySelectorAll('[data-text]')
-              [i].setAttribute('contentEditable', true)
-          }
-          document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i].onclick =
-            function () {
-              if (
-                !document
-                  .querySelector('[data-dropzone]')
-                  .querySelectorAll('[data-text]')
-                [i].hasAttribute('data-header')
-              ) {
-                document
-                  .querySelector('[data-dropzone]')
-                  .querySelectorAll('[data-text]')
-                [i].classList.add('border')
-              }
-                nodeElem.value = document
-                  .querySelector('[data-dropzone]')
-                  .querySelectorAll('[data-text]')[i]
-            }
+      }
+
+      if (draggedElem.value.attributes.media) {
+        event.target.querySelectorAll('img')[currentMedia].style.width = `${draggedElem.value.clientWidth}px`
+      }
+
+      if ((!draggedElem.value.disabled) && (!draggedElem.value.attributes.media)) {
+        // Add basic css class for styling
+        event.target.querySelectorAll('[data-text]')[currentIndex].removeAttribute('draggable')
+        event.target.querySelectorAll('[data-text]')[currentIndex].setAttribute('tabIndex', 0)
+        // check for headers and make them editable
+        if (event.target.querySelectorAll('[data-text]')[currentIndex].hasAttribute('data-header')) {
+          event.target.querySelectorAll('[data-text]')[currentIndex].setAttribute('contentEditable', true)
+        }
+
+        event.target.querySelectorAll('[data-text]')[currentIndex].onclick = function () {
+          nodeElem.value = event.target.querySelectorAll('[data-text]')[currentIndex];
+        }
+      }
+
+      event.target.querySelectorAll('[data-select]')[currentIndex].onclick = function () {
+        nodeElem.value = event.target.querySelectorAll('[data-select]')[currentIndex];
+        if (event.target.querySelectorAll('[data-select]')[currentIndex].options.length <= 1) {
+          hitSelect.value = true;
         }
       }
     }
@@ -103,7 +82,8 @@ export default {
       allowDrop,
       drop,
       draggedElem,
-      nodeElem
+      nodeElem,
+      hitSelect
     }
   }
 }
@@ -137,5 +117,7 @@ export default {
         </div>
       </div>
     </section>
+
+    <select-modal :active-node="nodeElem" :open="hitSelect" v-if="hitSelect" @closeSelect="hitSelect = false" />
   </div>
 </template>

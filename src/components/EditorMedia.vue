@@ -37,7 +37,7 @@ function initiateDrag(ev) {
             </button-component>
         </div>
         <div class="w-full max-h-96 p-2 flex justify-center border border-dashed" id="previewImg">
-            <img :src="`${objMedia.url}`" v-if="objMedia" style="height: fit-content; max-height: 100%;" @dragstart="initiateDrag($event)" draggable="true" />
+            <img :src="`${objMedia.url}`" v-if="objMedia" data-text media="true" style="height: fit-content; max-height: 100%;" @dragstart="initiateDrag($event)" draggable="true" />
         </div>
     </div>
 </template>

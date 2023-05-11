@@ -47,6 +47,7 @@ function initiateDrag(ev) {
         <select
           class="font-bold text-black w-full"
           style="width: 100%"
+          data-text
           data-select
           disabled
           draggable="true"
