@@ -62,20 +62,3 @@ function setDraggedElem(elem) {
 
   </div>
 </template>
-
-<style>
-    .layer{
-        position: absolute;
-        padding: 0;
-        margin: 0;
-        border: none;
-        background-size: contain;
-        background-repeat: no-repeat;
-    }
-    .text{
-        word-spacing: -4px;
-        letter-spacing: 1px;
-        white-space: pre;
-    }
-
-</style>

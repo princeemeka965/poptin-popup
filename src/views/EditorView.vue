@@ -4,9 +4,10 @@ import EditorMenu from '../components/EditorMenu.vue'
 import TextFormatEditor from '../components/TextFormatEditor.vue'
 import SelectModal from '../components/SelectModal.vue'
 import ContextMenu from '../components/ContextMenu.vue'
+import { AnFilledStar } from '@kalimahapps/vue-icons'
 
 export default {
-  components: { TextFormatEditor, EditorMenu, SelectModal, ContextMenu },
+  components: { TextFormatEditor, EditorMenu, SelectModal, ContextMenu, AnFilledStar },
   setup() {
     const draggedElem = ref(null)
     const nodeElem = ref(null)
@@ -47,6 +48,8 @@ export default {
         event.target.querySelectorAll('[data-text]')[currentIndex].removeAttribute('disabled')
         event.target.querySelectorAll('[data-text]')[currentIndex].removeAttribute('draggable')
         event.target.querySelectorAll('[data-text]')[currentIndex].setAttribute('tabIndex', 0)
+        event.target.querySelectorAll('[data-text]')[currentIndex].style.top = '11em'
+        event.target.querySelectorAll('[data-text]')[currentIndex].style.left = '13em'
 
         // Add basic css class for styling
         event.target.querySelectorAll('[data-text]')[currentIndex].classList.add('p-2')
@@ -69,6 +72,9 @@ export default {
         event.target.querySelectorAll('[media]')[currentMedia].style.width = '20em'
         event.target.querySelectorAll('[media]')[currentMedia].style.height = '20em'
         event.target.querySelectorAll('[media]')[currentMedia].style.backgroundSize = 'cover'
+        event.target.querySelectorAll('[media]')[currentMedia].style.top = '11em'
+        event.target.querySelectorAll('[media]')[currentIndex].style.left = '13em'
+
         event.target.querySelectorAll('[data-text]')[currentIndex].onclick = function () {
           nodeElem.value = event.target.querySelectorAll('[media]')[currentMedia]
           targetElemPosition.value = [
@@ -89,6 +95,8 @@ export default {
         // Add basic css class for styling
         event.target.querySelectorAll('[data-text]')[currentIndex].removeAttribute('draggable')
         event.target.querySelectorAll('[data-text]')[currentIndex].setAttribute('tabIndex', 0)
+        event.target.querySelectorAll('[data-text]')[currentIndex].style.top = '11em'
+        event.target.querySelectorAll('[data-text]')[currentIndex].style.left = '13em'
         // check for headers and make them editable
         if (
           event.target.querySelectorAll('[data-text]')[currentIndex].hasAttribute('data-header')
@@ -133,6 +141,17 @@ export default {
       targetElemPosition.value = []
     }
 
+    const setNodeElem = () => {
+      nodeElem.value = document.activeElement
+      targetElemPosition.value = [
+        {
+          x: Math.ceil(document.activeElement.getBoundingClientRect().left),
+          y: Math.ceil(document.activeElement.getBoundingClientRect().top)
+        }
+      ]
+      contextMenu.value = true
+    }
+
     return {
       allowDrop,
       drop,
@@ -141,11 +160,13 @@ export default {
       hitSelect,
       contextMenu,
       targetElemPosition,
-      closeContext
+      closeContext,
+      setNodeElem
     }
   },
   mounted() {
     document.querySelector('[data-dropzone]').addEventListener('click', function () {
+      console.log(document.activeElement)
       const dropZoneLength = document
         .querySelector('[data-dropzone]')
         .querySelectorAll('[data-text]').length
@@ -192,16 +213,50 @@ export default {
 
           <div
             class="w-full fixed flex flex-grow border border-dashed justify-center p-5 my-2"
-            @drop="drop($event)"
-            @dragover="allowDrop($event)"
-            data-dropzone
             style="height: 74vh; width: 58.3%; top: 19%"
           >
-            <div class="rounded-full -mt-1 flex flex-col p-3" style="width: 530px; height: 530px">
+            <div
+              style="width: 530px; height: 530px; border-radius: 50%; background-color: #e55252"
+              class="rounded-full border p-2"
+            >
               <div
-                class="rounded-full flex flex-col border-2 border-solid"
-                style="width: 530px; height: 530px"
-              ></div>
+                class="w-full h-full border-4 rounded-full"
+                style="border-color: #ffffff"
+                data-dropzone=""
+                @drop="drop($event)"
+                @dragover="allowDrop($event)"
+              >
+                <div data-aria="" style="width: 10em">
+                  <div
+                    tabindex="0"
+                    data-text
+                    style="top: 1.4em; left: 6.3em; font-size: 29px; color: #000; width: max-content"
+                    @click="setNodeElem($event)"
+                  >
+                    <AnFilledStar class="icons" />
+                  </div>
+                </div>
+                <div data-aria="" style="width: 10em">
+                  <div
+                    tabindex="0"
+                    data-text
+                    style="top: -0.3em; left: 6.7em; font-size: 35px; color: #000; width: max-content"
+                    @click="setNodeElem($event)"
+                  >
+                    <AnFilledStar class="icons" />
+                  </div>
+                </div>
+                <div data-aria="" style="width: 10em">
+                  <div
+                    tabindex="0"
+                    data-text
+                    style="top: -0.8em; left: 10em; font-size: 29px; color: #000; width: max-content"
+                    @click="setNodeElem($event)"
+                  >
+                    <AnFilledStar class="icons" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -227,3 +282,19 @@ export default {
     />
   </div>
 </template>
+
+<style>
+.layer {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.text {
+  word-spacing: -4px;
+  letter-spacing: 1px;
+  color: #ffffff;
+}
+</style>
