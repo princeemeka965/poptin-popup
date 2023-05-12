@@ -104,7 +104,7 @@ button {
 }
 
 [data-dropzone] .active {
-  border: 2px dashed #f1f1f1;
+  border: 1px dashed #f1f1f1;
 }
 
 [data-dropzone] button {
@@ -125,6 +125,12 @@ button {
   font-family: inherit;
   background-color: inherit;
   font-weight: inherit;
+}
+
+[data-dropzone] input::placeholder {
+  color: #dad8d8;
+  font-weight: 500;
+  font-size: 1rem;
 }
 
 [data-dropzone] h1 {

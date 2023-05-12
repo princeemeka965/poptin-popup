@@ -87,7 +87,7 @@ const borderStyles = ref({
   name: 'solid'
 })
 function executeColor(data) {
-  domTarget.value = props.activeNode.parentNode
+  domTarget.value = props.activeNode
   domTarget.value.style.backgroundColor = data.target.value
   bgColor.value = data.target.value
 }
@@ -102,7 +102,8 @@ function executeBorderColor(data) {
   borderColor.value = data.target.value
 }
 function updateFontSize(event) {
-  domTarget.value = props.activeNode.parentNode
+  console.log(props.activeNode)
+  domTarget.value = props.activeNode === null ? props.activeNode : props.activeNode.parentNode
   domTarget.value.style.fontSize = `${parseInt(event.target.value, 10)}px`
   fontSize.value = parseInt(event.target.value, 10)
 }
@@ -432,7 +433,7 @@ function updatePositionBottom(event) {
           <k-range
             class="text-yellow-900"
             :value="width"
-            :step="1"
+            :step="0.1"
             :min="0"
             :max="100"
             @input="(e) => updateWidth(e)"
@@ -459,7 +460,7 @@ function updatePositionBottom(event) {
           <k-range
             class="text-yellow-900"
             :value="height"
-            :step="1"
+            :step="0.1"
             :min="0"
             :max="100"
             @input="(e) => updateHeight(e)"
@@ -486,7 +487,7 @@ function updatePositionBottom(event) {
           <k-range
             class="text-yellow-900"
             :value="positionLeft"
-            :step="1"
+            :step="0.1"
             :min="-100"
             :max="100"
             @input="(e) => updatePositionLeft(e)"
@@ -513,7 +514,7 @@ function updatePositionBottom(event) {
           <k-range
             class="text-yellow-900"
             :value="positionRight"
-            :step="1"
+            :step="0.1"
             :min="-100"
             :max="100"
             @input="(e) => updatePositionRight(e)"
@@ -540,7 +541,7 @@ function updatePositionBottom(event) {
           <k-range
             class="text-yellow-900"
             :value="positionTop"
-            :step="1"
+            :step="0.1"
             :min="-100"
             :max="100"
             @input="(e) => updatePositionTop(e)"
@@ -567,7 +568,7 @@ function updatePositionBottom(event) {
           <k-range
             class="text-yellow-900"
             :value="positionBottom"
-            :step="1"
+            :step="0.1"
             :min="-100"
             :max="100"
             @input="(e) => updatePositionBottom(e)"

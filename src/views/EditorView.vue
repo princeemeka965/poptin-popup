@@ -1,5 +1,5 @@
 <script>
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import EditorMenu from '../components/EditorMenu.vue'
 import TextFormatEditor from '../components/TextFormatEditor.vue'
 import SelectModal from '../components/SelectModal.vue'
@@ -14,6 +14,43 @@ export default {
     const hitSelect = ref(null)
     const contextMenu = ref(false)
     let targetElemPosition = reactive({ value: [] })
+
+    onMounted(() => {
+      document.querySelector('[data-dropzone]').addEventListener('click', function () {
+        const dropZoneLength = document
+          .querySelector('[data-dropzone]')
+          .querySelectorAll('[data-text]').length
+
+        if (document.activeElement.hasAttribute('data-text')) {
+          document.activeElement.classList.add('active')
+          contextMenu.value = true
+          nodeElem.value = document.activeElement
+          targetElemPosition.value = [
+            {
+              x: Math.ceil(document.activeElement.getBoundingClientRect().left),
+              y: Math.ceil(document.activeElement.getBoundingClientRect().top)
+            }
+          ]
+          for (var i = 0; i < dropZoneLength; i++) {
+            if (
+              document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i] !==
+              document.activeElement
+            ) {
+              document
+                .querySelector('[data-dropzone]')
+                .querySelectorAll('[data-text]')
+                [i].classList.remove('active')
+            }
+          }
+        } else {
+          document
+            .querySelector('[data-dropzone]')
+            .querySelector('.active')
+            .classList.remove('active')
+          closeContext()
+        }
+      })
+    })
 
     const allowDrop = (event) => {
       event.preventDefault()
@@ -53,17 +90,6 @@ export default {
 
         // Add basic css class for styling
         event.target.querySelectorAll('[data-text]')[currentIndex].classList.add('p-2')
-
-        event.target.querySelectorAll('[data-text]')[currentIndex].onclick = function () {
-          nodeElem.value = document.activeElement
-          targetElemPosition.value = [
-            {
-              x: Math.ceil(document.activeElement.getBoundingClientRect().left),
-              y: Math.ceil(document.activeElement.getBoundingClientRect().top)
-            }
-          ]
-          contextMenu.value = true
-        }
       }
 
       if (draggedElem.value.attributes.media) {
@@ -74,21 +100,6 @@ export default {
         event.target.querySelectorAll('[media]')[currentMedia].style.backgroundSize = 'cover'
         event.target.querySelectorAll('[media]')[currentMedia].style.top = '11em'
         event.target.querySelectorAll('[media]')[currentIndex].style.left = '13em'
-
-        event.target.querySelectorAll('[data-text]')[currentIndex].onclick = function () {
-          nodeElem.value = event.target.querySelectorAll('[media]')[currentMedia]
-          targetElemPosition.value = [
-            {
-              x: Math.ceil(
-                event.target.querySelectorAll('[media]')[currentMedia].getBoundingClientRect().left
-              ),
-              y: Math.ceil(
-                event.target.querySelectorAll('[media]')[currentMedia].getBoundingClientRect().top
-              )
-            }
-          ]
-          contextMenu.value = true
-        }
       }
 
       if (!draggedElem.value.disabled && !draggedElem.value.attributes.media) {
@@ -105,33 +116,14 @@ export default {
             .querySelectorAll('[data-text]')
             [currentIndex].setAttribute('contentEditable', true)
         }
-
-        event.target.querySelectorAll('[data-text]')[currentIndex].onclick = function () {
-          nodeElem.value = document.activeElement
-          targetElemPosition.value = [
-            {
-              x: Math.ceil(document.activeElement.getBoundingClientRect().left),
-              y: Math.ceil(document.activeElement.getBoundingClientRect().top)
-            }
-          ]
-          contextMenu.value = true
-        }
       }
 
       // check for select Input field
       if (event.target.querySelectorAll('[data-text]')[currentIndex].hasAttribute('data-select')) {
         event.target.querySelectorAll('[data-select]')[currentIndex].onclick = function () {
-          nodeElem.value = document.activeElement
           if (event.target.querySelectorAll('[data-select]')[currentIndex].options.length <= 1) {
             hitSelect.value = true
           }
-          targetElemPosition.value = [
-            {
-              x: Math.ceil(document.activeElement.getBoundingClientRect().left),
-              y: Math.ceil(document.activeElement.getBoundingClientRect().top)
-            }
-          ]
-          contextMenu.value = true
         }
       }
     }
@@ -163,35 +155,6 @@ export default {
       closeContext,
       setNodeElem
     }
-  },
-  mounted() {
-    document.querySelector('[data-dropzone]').addEventListener('click', function () {
-      console.log(document.activeElement)
-      const dropZoneLength = document
-        .querySelector('[data-dropzone]')
-        .querySelectorAll('[data-text]').length
-
-      if (document.activeElement.hasAttribute('data-text')) {
-        document.activeElement.classList.add('active')
-
-        for (var i = 0; i < dropZoneLength; i++) {
-          if (
-            document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i] !==
-            document.activeElement
-          ) {
-            document
-              .querySelector('[data-dropzone]')
-              .querySelectorAll('[data-text]')
-              [i].classList.remove('active')
-          }
-        }
-      } else {
-        document
-          .querySelector('[data-dropzone]')
-          .querySelector('.active')
-          .classList.remove('active')
-      }
-    })
   }
 }
 </script>
@@ -226,35 +189,137 @@ export default {
                 @drop="drop($event)"
                 @dragover="allowDrop($event)"
               >
-                <div data-aria="" style="width: 10em">
+                <!---- Review Stars Block -->
+
+                <div data-aria="">
                   <div
                     tabindex="0"
                     data-text
-                    style="top: 1.4em; left: 6.3em; font-size: 29px; color: #000; width: max-content"
+                    style="
+                      top: 1.4em;
+                      left: 6.3em;
+                      font-size: 29px;
+                      color: rgb(198 35 35);
+                      width: max-content;
+                    "
                     @click="setNodeElem($event)"
                   >
                     <AnFilledStar class="icons" />
                   </div>
                 </div>
-                <div data-aria="" style="width: 10em">
+                <div data-aria="">
                   <div
                     tabindex="0"
                     data-text
-                    style="top: -0.3em; left: 6.7em; font-size: 35px; color: #000; width: max-content"
+                    style="
+                      top: -0.3em;
+                      left: 6.7em;
+                      font-size: 35px;
+                      color: rgb(198 35 35);
+                      width: max-content;
+                    "
                     @click="setNodeElem($event)"
                   >
                     <AnFilledStar class="icons" />
                   </div>
                 </div>
-                <div data-aria="" style="width: 10em">
+                <div data-aria="">
                   <div
                     tabindex="0"
                     data-text
-                    style="top: -0.8em; left: 10em; font-size: 29px; color: #000; width: max-content"
+                    style="
+                      top: -0.8em;
+                      left: 10em;
+                      font-size: 29px;
+                      color: rgb(198 35 35);
+                      width: max-content;
+                    "
                     @click="setNodeElem($event)"
                   >
                     <AnFilledStar class="icons" />
                   </div>
+                </div>
+
+                <!--- Text Block -->
+                <div data-aria="" style="font-size: 27px">
+                  <h1
+                    class="font-bold text-black w-full p-2"
+                    data-text=""
+                    data-header=""
+                    tabindex="0"
+                    contenteditable="true"
+                    style="top: -0.4rem; left: 3.4rem; right: 0rem; width: 23rem"
+                  >
+                    <div style="text-align: center">
+                      <span style="font-size: inherit; font-weight: inherit; line-height: 1.1em"
+                        ><font color="#ffffff" style="font-weight: bold"
+                          >All the texts and elements in this popup should be editable and
+                          dragable</font
+                        ></span
+                      >
+                    </div>
+                  </h1>
+                </div>
+
+                <!--- Input Field Block-->
+                <div data-aria="">
+                  <input
+                    class="font-bold text-black w-full p-2 active"
+                    data-text=""
+                    tabindex="0"
+                    placeholder="E-mail"
+                    value=""
+                    style="
+                      top: 1rem;
+                      left: 5rem;
+                      width: 21rem;
+                      height: 3rem;
+                      border-radius: 11px;
+                      border-width: 2px;
+                      border-style: solid;
+                      background-color: rgb(255, 255, 255);
+                    "
+                  />
+                </div>
+
+                <!--- Button Field Block-->
+                <div data-aria="">
+                  <button
+                    class="font-bold text-black w-full p-2"
+                    data-text=""
+                    tabindex="0"
+                    style="
+                      top: 3rem;
+                      left: 5rem;
+                      width: 21rem;
+                      background-color: rgb(15, 15, 15);
+                      height: 3.5rem;
+                      border-radius: 34px;
+                      color: #ffffff;
+                      font-size: 1.5em;
+                      font-weight: bold;
+                    "
+                  >
+                    SIGNUP NOW
+                  </button>
+                </div>
+
+                <!--- Text Block -->
+                <div data-aria="">
+                  <h1
+                    class="font-bold text-black w-full p-2"
+                    data-text=""
+                    data-header=""
+                    tabindex="0"
+                    contenteditable="true"
+                    style="top: 5rem; left: 5rem; right: 0rem; width: 21rem"
+                  >
+                    <div style="text-align: center">
+                      <span style="font-size: inherit; font-weight: inherit; line-height: 1.1em"
+                        ><font color="#ffffff">No credit card required. No surprises</font></span
+                      >
+                    </div>
+                  </h1>
                 </div>
               </div>
             </div>
