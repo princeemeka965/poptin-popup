@@ -7,6 +7,10 @@ import EditorMedia from './EditorMedia.vue';
 const active = ref('component');
 const emit = defineEmits(['selectedElem'])
 
+const props = defineProps({
+  activeNode: Object,
+});
+
 function currentTab(tab) {
     active.value = tab;
 }
@@ -50,11 +54,28 @@ function setDraggedElem(elem) {
       </div>
     </div>
 
-    <div class="w-full flex flex-col">
+    <div class="w-full flex flex-col" style="overflow: auto; height: 74vh">
         <editor-components v-if="active === 'component'" @initiateDrag="setDraggedElem($event)" />
-        <editor-styles v-if="active === 'styles'" />
+        <editor-styles v-if="active === 'styles'" :active-node="props.activeNode" />
         <editor-media v-if="active === 'media'" @initiateDrag="setDraggedElem($event)" />
     </div>
 
   </div>
 </template>
+
+<style>
+    .layer{
+        position: absolute;
+        padding: 0;
+        margin: 0;
+        border: none;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+    .text{
+        word-spacing: -4px;
+        letter-spacing: 1px;
+        white-space: pre;
+    }
+
+</style>

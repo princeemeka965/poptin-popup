@@ -24,7 +24,8 @@ export default {
       // Create a div that will house our dragged Item
       // Style the div element
       const divElem = document.createElement('div')
-      divElem.setAttribute('data-text', '')
+      divElem.setAttribute('data-aria', '')
+      divElem.style.width = '10em'
 
       // Append the dragged element to the div
       divElem.appendChild(draggedElem.value.cloneNode(true))
@@ -32,9 +33,11 @@ export default {
       // Append the div to our dropzone
       event.target.appendChild(divElem)
 
-      const domLength = event.target.querySelectorAll('[data-text]').length
+      const mediaLength = event.target.querySelectorAll('[media]').length
 
-      const mediaLength = event.target.querySelectorAll('img').length
+      const domLength = document
+        .querySelector('[data-dropzone]')
+        .querySelectorAll('[data-text]').length
 
       const currentIndex = domLength - 1
 
@@ -47,14 +50,13 @@ export default {
 
         // Add basic css class for styling
         event.target.querySelectorAll('[data-text]')[currentIndex].classList.add('p-2')
-        event.target.querySelectorAll('[data-text]')[currentIndex].style.width = 'fit-content'
 
         event.target.querySelectorAll('[data-text]')[currentIndex].onclick = function () {
-          nodeElem.value = event.target.querySelectorAll('[data-text]')[currentIndex]
+          nodeElem.value = document.activeElement
           targetElemPosition.value = [
             {
-              x: Math.ceil(nodeElem.value.getBoundingClientRect().left),
-              y: Math.ceil(nodeElem.value.getBoundingClientRect().top)
+              x: Math.ceil(document.activeElement.getBoundingClientRect().left),
+              y: Math.ceil(document.activeElement.getBoundingClientRect().top)
             }
           ]
           contextMenu.value = true
@@ -62,16 +64,21 @@ export default {
       }
 
       if (draggedElem.value.attributes.media) {
-        event.target.querySelectorAll('img')[
-          currentMedia
-        ].style.width = `${draggedElem.value.clientWidth}px`
-        event.target.querySelectorAll('img')[currentMedia].removeAttribute('draggable')
+        event.target.querySelectorAll('[media]')[currentMedia].removeAttribute('draggable')
+        event.target.querySelectorAll('[media]')[currentMedia].classList.remove('pb-44')
+        event.target.querySelectorAll('[media]')[currentMedia].style.width = '20em'
+        event.target.querySelectorAll('[media]')[currentMedia].style.height = '20em'
+        event.target.querySelectorAll('[media]')[currentMedia].style.backgroundSize = 'cover'
         event.target.querySelectorAll('[data-text]')[currentIndex].onclick = function () {
-          nodeElem.value = event.target.querySelectorAll('img')[currentMedia]
+          nodeElem.value = event.target.querySelectorAll('[media]')[currentMedia]
           targetElemPosition.value = [
             {
-              x: Math.ceil(nodeElem.value.getBoundingClientRect().left),
-              y: Math.ceil(nodeElem.value.getBoundingClientRect().top)
+              x: Math.ceil(
+                event.target.querySelectorAll('[media]')[currentMedia].getBoundingClientRect().left
+              ),
+              y: Math.ceil(
+                event.target.querySelectorAll('[media]')[currentMedia].getBoundingClientRect().top
+              )
             }
           ]
           contextMenu.value = true
@@ -92,11 +99,11 @@ export default {
         }
 
         event.target.querySelectorAll('[data-text]')[currentIndex].onclick = function () {
-          nodeElem.value = event.target.querySelectorAll('[data-text]')[currentIndex]
+          nodeElem.value = document.activeElement
           targetElemPosition.value = [
             {
-              x: Math.ceil(nodeElem.value.getBoundingClientRect().left),
-              y: Math.ceil(nodeElem.value.getBoundingClientRect().top)
+              x: Math.ceil(document.activeElement.getBoundingClientRect().left),
+              y: Math.ceil(document.activeElement.getBoundingClientRect().top)
             }
           ]
           contextMenu.value = true
@@ -105,15 +112,15 @@ export default {
 
       // check for select Input field
       if (event.target.querySelectorAll('[data-text]')[currentIndex].hasAttribute('data-select')) {
-        event.target.querySelectorAll('[data-select]')[currentIndex - 1].onclick = function () {
-          nodeElem.value = event.target.querySelectorAll('[data-select]')[currentIndex - 1]
-          if (event.target.querySelectorAll('[data-select]')[currentIndex - 1].options.length <= 1) {
+        event.target.querySelectorAll('[data-select]')[currentIndex].onclick = function () {
+          nodeElem.value = document.activeElement
+          if (event.target.querySelectorAll('[data-select]')[currentIndex].options.length <= 1) {
             hitSelect.value = true
           }
           targetElemPosition.value = [
             {
-              x: Math.ceil(nodeElem.value.getBoundingClientRect().left),
-              y: Math.ceil(nodeElem.value.getBoundingClientRect().top)
+              x: Math.ceil(document.activeElement.getBoundingClientRect().left),
+              y: Math.ceil(document.activeElement.getBoundingClientRect().top)
             }
           ]
           contextMenu.value = true
@@ -136,6 +143,34 @@ export default {
       targetElemPosition,
       closeContext
     }
+  },
+  mounted() {
+    document.querySelector('[data-dropzone]').addEventListener('click', function () {
+      const dropZoneLength = document
+        .querySelector('[data-dropzone]')
+        .querySelectorAll('[data-text]').length
+
+      if (document.activeElement.hasAttribute('data-text')) {
+        document.activeElement.classList.add('active')
+
+        for (var i = 0; i < dropZoneLength; i++) {
+          if (
+            document.querySelector('[data-dropzone]').querySelectorAll('[data-text]')[i] !==
+            document.activeElement
+          ) {
+            document
+              .querySelector('[data-dropzone]')
+              .querySelectorAll('[data-text]')
+              [i].classList.remove('active')
+          }
+        }
+      } else {
+        document
+          .querySelector('[data-dropzone]')
+          .querySelector('.active')
+          .classList.remove('active')
+      }
+    })
   }
 }
 </script>
@@ -152,19 +187,27 @@ export default {
       >
         <!--- Section for the canvas -->
 
-        <div class="lg:w-2/3 flex w-full flex-col lg:mx-3">
+        <div class="lg:w-2/3 flex w-full flex-col lg:mx-3" style="height: 80vh">
           <text-format-editor :active-node="nodeElem" />
 
           <div
-            class="w-full flex flex-grow border border-dashed flex-col p-5 my-2"
+            class="w-full fixed flex flex-grow border border-dashed justify-center p-5 my-2"
             @drop="drop($event)"
             @dragover="allowDrop($event)"
             data-dropzone
-          ></div>
+            style="height: 74vh; width: 58.3%; top: 19%"
+          >
+            <div class="rounded-full -mt-1 flex flex-col p-3" style="width: 530px; height: 530px">
+              <div
+                class="rounded-full flex flex-col border-2 border-solid"
+                style="width: 530px; height: 530px"
+              ></div>
+            </div>
+          </div>
         </div>
 
         <div class="lg:w-1/3 w-full flex flex-col p-2 poptin-editor">
-          <editor-menu @selectedElem="draggedElem = $event" />
+          <editor-menu @selectedElem="draggedElem = $event" :active-node="nodeElem" />
         </div>
       </div>
     </section>

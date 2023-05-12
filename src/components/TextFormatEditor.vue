@@ -17,7 +17,6 @@ function unlink() {
 }
 
 function executeColor(cmd, color) {
-  console.log(color.target.value)
 document.execCommand(cmd, false, color.target.value)
 }
 </script>

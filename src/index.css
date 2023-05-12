@@ -103,21 +103,44 @@ button {
   cursor: pointer !important;
 }
 
-[data-dropzone] h1:focus {
+[data-dropzone] .active {
   border: 2px dashed #f1f1f1;
 }
 
 [data-dropzone] button {
-  border: 1px solid #f1f1f1;
-  width: auto !important;
+  border: inherit;
+  height: 100%;
+  border-radius: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  background-color: inherit;
+  font-weight: inherit;
+  text-align: center;
 }
 
 [data-dropzone] input {
-  border: 1px solid grey;
+  border: inherit;
+  height: 100%;
+  font-size: inherit;
+  font-family: inherit;
+  background-color: inherit;
+  font-weight: inherit;
 }
 
 [data-dropzone] h1 {
   cursor: auto !important;
+  width: inherit;
+  height: inherit;
+}
+
+[data-dropzone] img {
+  width: inherit !important;
+  height: inherit !important;
+  border-radius: inherit;
+}
+
+[data-dropzone] svg {
+  color: inherit;
 }
 
 [data-select] {
@@ -127,6 +150,15 @@ button {
 [data-dropzone] [data-select] {
   appearance: auto;
   cursor: pointer;
+}
+
+[data-dropzone] select {
+  border: inherit;
+  height: 100%;
+  font-size: inherit;
+  font-family: inherit;
+  background-color: inherit;
+  font-weight: inherit;
 }
 
 select:disabled {
@@ -162,4 +194,8 @@ ul li {
 a {
   cursor: pointer;
   text-decoration: underline;
+}
+
+[data-dropzone] img[draggable] {
+  cursor: auto;
 }

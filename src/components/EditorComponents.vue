@@ -16,7 +16,7 @@ function initiateDrag(ev) {
 </script>
 
 <template>
-  <div>
+  <div style="overflow: auto;">
     <!--- Display list of Html Elements that can be dragged to the popup-->
     <div class="my-2 p-2 border border-dashed">
       <div class="w-full" @dragstart="initiateDrag($event)">
@@ -105,7 +105,7 @@ function initiateDrag(ev) {
       <div class="flex flex-wrap w-full my-4">
         <div class="p-1 mx-2 flex poptin-editor">
           <div class="w-full" @dragstart="initiateDrag($event)">
-            <div class="min-w-max" draggable="true" data-text>
+            <div draggable="true" data-text style="color: #000; width: max-content">
               <AnFilledStar class="icons" />
             </div>
           </div>

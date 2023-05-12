@@ -8,8 +8,17 @@ const props = defineProps({
 });
 
 const componentDelete = () => {
-  document.querySelector('[data-dropzone]').removeChild(props.activeNode.parentNode)
-  emit('closeContext', true)
+  const dropZoneNodeLength = document.querySelector('[data-dropzone]').childNodes.length;
+
+  for (var i = 0; i < dropZoneNodeLength; i++) {
+    if (document.querySelector('[data-dropzone]').childNodes[i] === props.activeNode) {
+      document.querySelector('[data-dropzone]').removeChild(props.activeNode)
+    }
+    else if (document.querySelector('[data-dropzone]').childNodes[i] === props.activeNode.parentNode) {
+      document.querySelector('[data-dropzone]').removeChild(props.activeNode.parentNode)
+    }
+  }
+  emit('closeContext', true);
 }
 
 </script>
@@ -19,7 +28,7 @@ const componentDelete = () => {
     id="context-menu"
     class="text-base"
     v-if="props.open"
-    :style="`margin-top: ${props.position.value[0].y}px; margin-left: ${props.position.value[0].x + 790}px`"
+    :style="`margin-top: ${props.position.value[0].y}px; margin-left: 950px`"
   >
     <div class="item text-sm" @click="componentDelete">
       <img width="15" src="https://img.icons8.com/material-outlined/24/null/add-trash.png" />
