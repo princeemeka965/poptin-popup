@@ -1,23 +1,23 @@
 <script setup>
 function colorPallete() {
-  document.getElementById('color').click();
+  document.getElementById('color').click()
 }
 
-function executeCommand(cmd) {
-document.execCommand(cmd, false, '')
+function executeCommand(cmd,value) {
+  document.execCommand(cmd, false, value)
 }
 
 function link() {
   const url = 'https://poptin.com'
-  document.execCommand("createLink", false, url);
+  document.execCommand('createLink', false, url)
 }
 
 function unlink() {
-  document.execCommand("unlink", false, '');
+  document.execCommand('unlink', false, '')
 }
 
 function executeColor(cmd, color) {
-document.execCommand(cmd, false, color.target.value)
+  document.execCommand(cmd, false, color.target.value)
 }
 </script>
 
@@ -26,7 +26,13 @@ document.execCommand(cmd, false, color.target.value)
     <div class="toolbar">
       <div class="line">
         <div class="box">
-          <span class="editor-btn icon smaller" data-action="bold" data-tag-name="b" title="Bold" @click="executeCommand('bold')">
+          <span
+            class="editor-btn icon smaller"
+            data-action="bold"
+            data-tag-name="b"
+            title="Bold"
+            @click="executeCommand('bold', '')"
+          >
             <img src="https://img.icons8.com/fluency-systems-filled/48/000000/bold.png" />
           </span>
           <span
@@ -34,7 +40,7 @@ document.execCommand(cmd, false, color.target.value)
             data-action="italic"
             data-tag-name="i"
             title="Italic"
-            @click="executeCommand('italic')"
+            @click="executeCommand('italic', '')"
           >
             <img src="https://img.icons8.com/fluency-systems-filled/48/000000/italic.png" />
           </span>
@@ -43,7 +49,7 @@ document.execCommand(cmd, false, color.target.value)
             data-action="underline"
             data-tag-name="u"
             title="Underline"
-            @click="executeCommand('underline')"
+            @click="executeCommand('underline', '')"
           >
             <img src="https://img.icons8.com/fluency-systems-filled/48/000000/underline.png" />
           </span>
@@ -52,66 +58,55 @@ document.execCommand(cmd, false, color.target.value)
             data-action="strikeThrough"
             data-tag-name="strike"
             title="Strike through"
-            @click="executeCommand('strikeThrough')"
+            @click="executeCommand('strikeThrough', '')"
           >
             <img src="https://img.icons8.com/fluency-systems-filled/30/000000/strikethrough.png" />
           </span>
         </div>
 
         <div class="box">
-          <span class="editor-btn icon has-submenu">
+          <span
+            class="editor-btn icon"
+            data-action="justifyLeft"
+            data-style="textAlign:left"
+            title="Justify left"
+            @click="executeCommand('justifyLeft', '')"
+          >
             <img src="https://img.icons8.com/fluency-systems-filled/48/000000/align-left.png" />
-            <div class="submenu">
-              <span
-                class="editor-btn icon"
-                data-action="justifyLeft"
-                data-style="textAlign:left"
-                title="Justify left"
-                @click="executeCommand('justifyLeft')"
-              >
-                <img src="https://img.icons8.com/fluency-systems-filled/48/000000/align-left.png" />
-              </span>
-              <span
-                class="editor-btn icon"
-                data-action="justifyCenter"
-                data-style="textAlign:center"
-                title="Justify center"
-                @click="executeCommand('justifyCenter')"
-              >
-                <img
-                  src="https://img.icons8.com/fluency-systems-filled/48/000000/align-center.png"
-                />
-              </span>
-              <span
-                class="editor-btn icon"
-                data-action="justifyRight"
-                data-style="textAlign:right"
-                title="Justify right"
-                @click="executeCommand('justifyRight')"
-              >
-                <img
-                  src="https://img.icons8.com/fluency-systems-filled/48/000000/align-right.png"
-                />
-              </span>
-              <span
-                class="editor-btn icon"
-                data-action="formatBlock"
-                data-style="textAlign:justify"
-                title="Justify block"
-                @click="executeCommand('justifyLeft')"
-              >
-                <img
-                  src="https://img.icons8.com/fluency-systems-filled/48/000000/align-justify.png"
-                />
-              </span>
-            </div>
+          </span>
+          <span
+            class="editor-btn icon"
+            data-action="justifyCenter"
+            data-style="textAlign:center"
+            title="Justify center"
+            @click="executeCommand('justifyCenter', '')"
+          >
+            <img src="https://img.icons8.com/fluency-systems-filled/48/000000/align-center.png" />
+          </span>
+          <span
+            class="editor-btn icon"
+            data-action="justifyRight"
+            data-style="textAlign:right"
+            title="Justify right"
+            @click="executeCommand('justifyRight', '')"
+          >
+            <img src="https://img.icons8.com/fluency-systems-filled/48/000000/align-right.png" />
+          </span>
+          <span
+            class="editor-btn icon"
+            data-action="formatBlock"
+            data-style="textAlign:justify"
+            title="Justify block"
+            @click="executeCommand('justifyLeft', '')"
+          >
+            <img src="https://img.icons8.com/fluency-systems-filled/48/000000/align-justify.png" />
           </span>
           <span
             class="editor-btn icon"
             data-action="insertOrderedList"
             data-tag-name="ol"
             title="Insert ordered list"
-            @click="executeCommand('insertOrderedList')"
+            @click="executeCommand('insertOrderedList', '')"
           >
             <img src="https://img.icons8.com/fluency-systems-filled/48/000000/numbered-list.png" />
           </span>
@@ -129,37 +124,52 @@ document.execCommand(cmd, false, color.target.value)
             data-action="outdent"
             title="Outdent"
             data-required-tag="li"
-            @click="executeCommand('outdent')"
+            @click="executeCommand('outdent', '')"
           >
             <img src="https://img.icons8.com/fluency-systems-filled/48/000000/outdent.png" />
           </span>
-          <span class="editor-btn icon" data-action="indent" title="Indent"
-                      @click="executeCommand('indent')"
-                      >
+          <span
+            class="editor-btn icon"
+            data-action="indent"
+            title="Indent"
+            @click="executeCommand('indent', '')"
+          >
             <img src="https://img.icons8.com/fluency-systems-filled/48/000000/indent.png" />
           </span>
         </div>
         <div class="box">
-          <span class="editor-btn icon smaller" data-action="undo" title="Undo"
-                      @click="executeCommand('undo')"
-                      >
+          <span
+            class="editor-btn icon smaller"
+            data-action="undo"
+            title="Undo"
+            @click="executeCommand('undo', '')"
+          >
             <img src="https://img.icons8.com/fluency-systems-filled/48/000000/undo--v1.png" />
           </span>
-          <span class="editor-btn icon smaller" data-action="redo" title="Redo"
-                      @click="executeCommand('redo')"
-                      >
-            <img src="https://img.icons8.com/fluency-systems-regular/48/null/redo.png"/>
+          <span
+            class="editor-btn icon smaller"
+            data-action="redo"
+            title="Redo"
+            @click="executeCommand('redo', '')"
+          >
+            <img src="https://img.icons8.com/fluency-systems-regular/48/null/redo.png" />
           </span>
-          <span class="editor-btn icon" data-action="removeFormat" title="Remove format"
-          @click="executeCommand('removeformat')"
+          <span
+            class="editor-btn icon"
+            data-action="removeFormat"
+            title="Remove format"
+            @click="executeCommand('removeformat', '')"
           >
             <img src="https://img.icons8.com/fluency-systems-filled/48/000000/remove-format.png" />
           </span>
         </div>
 
         <div class="box">
-          <span class="editor-btn icon smaller" data-action="createLink" title="Insert Link"
-          @click="link()"
+          <span
+            class="editor-btn icon smaller"
+            data-action="createLink"
+            title="Insert Link"
+            @click="link()"
           >
             <img src="https://img.icons8.com/fluency-systems-filled/48/000000/add-link.png" />
           </span>
@@ -168,7 +178,7 @@ document.execCommand(cmd, false, color.target.value)
             data-action="unlink"
             data-tag-name="a"
             title="Unlink"
-          @click="unlink()"
+            @click="unlink()"
           >
             <img src="https://img.icons8.com/fluency-systems-filled/48/000000/delete-link.png" />
           </span>
@@ -184,8 +194,67 @@ document.execCommand(cmd, false, color.target.value)
             <img
               src="https://img.icons8.com/external-flat-icons-inmotus-design/67/null/external-energy-natural-sources-of-energy-flat-icons-inmotus-design-5.png"
             />
+          </span>
+          <input
+            type="color"
+            id="color"
+            style="opacity: 0; width: 1px; height: 1px"
+            @change="executeColor('foreColor', $event)"
+          />
+        </div>
+
+        <div class="box">
+          <span class="editor-btn icon has-submenu">
+           <img width="24" height="24" src="https://img.icons8.com/material-outlined/24/header-1.png" alt="header-1"/>
+            <div class="submenu">
+          <span
+            class="editor-btn icon"
+            data-action="delete"
+            title="Header 1"
+            @click="executeCommand('heading', 'H1')"
+          >
+           <img width="24" height="24" src="https://img.icons8.com/material-outlined/24/header-1.png" alt="header-1"/>
+          </span>
+          <span
+            class="editor-btn icon"
+            data-action="delete"
+            title="Header 2"
+            @click="executeCommand('heading', 'H2')"
+          >
+           <img width="24" height="24" src="https://img.icons8.com/material-two-tone/24/header-2.png" alt="header-2"/>
+          </span>
+          <span
+            class="editor-btn icon"
+            data-action="delete"
+            title="Header 3"
+            @click="executeCommand('heading', 'H3')"
+          >
+           <img width="24" height="24" src="https://img.icons8.com/material-two-tone/24/header-3.png" alt="header-3"/>
+          </span>
+        </div>
         </span>
-            <input type="color" id="color" style="opacity: 0; width: 1px; height: 1px" @change="executeColor('foreColor', $event)" />
+        </div>
+
+        <div class="box">
+          <span
+            class="editor-btn icon"
+            data-action="superscript"
+            title="Superscript"
+            @click="executeCommand('superscript','')"
+          >
+           <img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/superscript.png" alt="superscript"/>
+          </span>
+        </div>
+
+        <div class="box">
+          <span
+            class="editor-btn icon"
+            data-action="subscript"
+            title="Subscript"
+            @click="executeCommand('subscript', '')"
+          >
+           <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/subscript--v2.png" alt="subscript--v2"/>
+          </span>
         </div>
 
         <div class="box">
@@ -195,9 +264,7 @@ document.execCommand(cmd, false, color.target.value)
             title="Delete"
             @click="executeCommand('delete')"
           >
-            <img
-              src="https://img.icons8.com/material-outlined/24/null/add-trash.png"
-            />
+            <img src="https://img.icons8.com/material-outlined/24/null/add-trash.png" />
           </span>
         </div>
       </div>
@@ -276,7 +343,7 @@ document.execCommand(cmd, false, color.target.value)
   display: block;
 }
 
-input[type="color"] {
+input[type='color'] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -286,13 +353,12 @@ input[type="color"] {
   border: none;
   cursor: pointer;
 }
-input[type="color"]::-webkit-color-swatch {
+input[type='color']::-webkit-color-swatch {
   border-radius: 15px;
   box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #020929;
 }
-input[type="color"]::-moz-color-swatch {
+input[type='color']::-moz-color-swatch {
   border-radius: 15px;
   box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #020929;
 }
-
 </style>

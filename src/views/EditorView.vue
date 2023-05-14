@@ -83,6 +83,25 @@ export default {
       targetElemPosition.value = []
     }
 
+    const savePopup = () => {
+      // get the innerhtml elements of popupTemplate div
+      // this passes the innerhtml elements as string
+      const popupContent = document.getElementById('popupTemplate').innerHTML;
+      // Set it as localStorage
+      localStorage.setItem("popupDom", popupContent);
+    }
+
+    const previewPopUp = () => {
+      // here we use the DOMParser().parseFromString to parse and convert HTML Strings to DOM nodes
+      const parser = new DOMParser();
+      const htmlString = localStorage.getItem('popupDom');
+      const doc = parser.parseFromString(htmlString, 'text/html');
+      // Parsed nodes
+      const nodes = doc.body;
+
+      console.log(nodes)
+    }
+
     return {
       allowDrop,
       drop,
@@ -91,7 +110,9 @@ export default {
       hitSelect,
       contextMenu,
       targetElemPosition,
-      closeContext
+      closeContext,
+      savePopup,
+      previewPopUp
     }
   }
 }
@@ -100,10 +121,39 @@ export default {
 <template>
   <div class="w-full flex flex-col">
     <header class="w-full p-5 flex">
+      <div class="w-full flex flex-grow">
       <img src="@/assets/poptin.png" width="100" />
+      </div>
+      <div class="flex">
+      <button
+        style="
+          width: 8rem;
+          text-align: center;
+          padding: 9px 12px;
+          background-color: #f1f1f1;
+          border-radius: 20px;
+          color: #000;
+        "
+        @click="previewPopUp"
+      >
+        Preview
+      </button>
+      <button
+        style="
+          width: 8rem;
+          text-align: center;
+          padding: 9px 12px;
+          border-radius: 20px;
+        "
+        class="bg-yellow-900 text-white mx-5"
+        @click="savePopup"
+      >
+        Save
+      </button>
+      </div>
     </header>
 
-    <section class="w-full h-full flex justify-center">
+    <section class="w-full h-full -mt-3 flex justify-center">
       <div
         class="lg:w-11/12 w-full flex sm:flex-col md:flex-col lg:flex-row bg-white my-5 lg:p-5 p-2"
       >
@@ -115,6 +165,7 @@ export default {
           <div
             class="w-full fixed flex flex-grow border border-dashed justify-center p-5 my-2"
             style="height: 74vh; width: 58.3%; top: 19%"
+            id="popupTemplate"
           >
             <div
               style="width: 530px; height: 530px; border-radius: 50%; background-color: #e55252"
