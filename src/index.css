@@ -57,6 +57,10 @@ select:focus {
   outline: none;
 }
 
+textarea:focus {
+  outline: none;
+}
+
 [contentEditable]:focus {
   outline: none;
 }
@@ -101,30 +105,28 @@ button {
 
 [data-dropzone] button {
   cursor: pointer !important;
+  z-index: 9;
 }
 
 [data-dropzone] .active {
-  border: 1px dashed #f1f1f1;
+  border: 2px dashed #f1f1f1;
 }
 
 [data-dropzone] button {
-  border: inherit;
-  height: 100%;
-  border-radius: inherit;
   font-size: inherit;
   font-family: inherit;
-  background-color: inherit;
   font-weight: inherit;
   text-align: center;
+  width: auto;
 }
 
 [data-dropzone] input {
-  border: inherit;
-  height: 100%;
   font-size: inherit;
   font-family: inherit;
-  background-color: inherit;
   font-weight: inherit;
+  width: auto;
+  border-radius: 10px;
+  left: 5em;
 }
 
 [data-dropzone] input::placeholder {
@@ -135,8 +137,14 @@ button {
 
 [data-dropzone] h1 {
   cursor: auto !important;
-  width: inherit;
-  height: inherit;
+  width: 20em;
+  height: auto;
+  left: 5em;
+  top: 1em;
+}
+
+[data-dropzone] textarea {
+  width: auto;
 }
 
 [data-dropzone] img {
@@ -159,12 +167,10 @@ button {
 }
 
 [data-dropzone] select {
-  border: inherit;
-  height: 100%;
   font-size: inherit;
   font-family: inherit;
-  background-color: inherit;
   font-weight: inherit;
+  width: auto;
 }
 
 select:disabled {

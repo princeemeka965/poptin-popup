@@ -19,8 +19,8 @@ function initiateDrag(ev) {
   <div style="overflow: auto;">
     <!--- Display list of Html Elements that can be dragged to the popup-->
     <div class="my-2 p-2 border border-dashed">
-      <div class="w-full" @dragstart="initiateDrag($event)">
-        <h1 class="font-bold text-black w-full p-2" data-text data-header draggable="true">Header</h1>
+      <div class="w-full">
+        <h1 class="font-bold text-black w-full p-2" @dragstart="initiateDrag($event)" data-text data-header draggable="true">Header</h1>
       </div>
     </div>
 
@@ -46,7 +46,6 @@ function initiateDrag(ev) {
       <div class="w-full" @dragstart="initiateDrag($event)">
         <select
           class="font-bold text-black w-full p-2"
-          style="width: 100%"
           data-text
           data-select
           disabled
@@ -88,7 +87,8 @@ function initiateDrag(ev) {
     <div class="my-2 p-2 border border-dashed">
       <div class="w-full" @dragstart="initiateDrag($event)">
         <textarea
-          class="font-bold text-black w-full p-2"
+          class="font-bold text-black p-2"
+          cols="34"
           data-text
           disabled
           draggable="true"
