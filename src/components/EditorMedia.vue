@@ -33,12 +33,13 @@ function initiateDrag(ev) {
         <template v-slot:button> Select an Image </template>
       </button-component>
     </div>
-    <div class="w-full max-h-96 p-2 flex justify-center border border-dashed" id="previewImg">
+    <div class="w-full h-96 p-2 flex justify-center border border-dashed" id="previewImg">
       <div
         class="pb-44"
         v-if="objMedia"
         :style="`background: url(${objMedia.url}); background-size: contain; width: 100%; background-repeat: no-repeat`"
         data-text
+        dragged
         media
         @dragstart="initiateDrag($event)"
         draggable="true"

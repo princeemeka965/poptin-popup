@@ -1,6 +1,6 @@
 export function processDropElem(clonedElem) {
-    clonedElem.removeAttribute('draggable')
     clonedElem.setAttribute('tabIndex', 0)
+    clonedElem.classList.add('absolute')
 
     if (clonedElem.hasAttribute('disabled')) {
         clonedElem.removeAttribute('disabled')
@@ -10,8 +10,8 @@ export function processDropElem(clonedElem) {
 
     if (clonedElem.hasAttribute('media')) {
         clonedElem.classList.remove('pb-44')
-        clonedElem.style.width = '20em'
-        clonedElem.style.height = '20em'
+        clonedElem.style.width = '10em'
+        clonedElem.style.height = '10em'
         clonedElem.style.backgroundSize = 'cover'
     }
 
@@ -21,14 +21,13 @@ export function processDropElem(clonedElem) {
             clonedElem.setAttribute('contentEditable', true)
         }
     }
+    const posY = window.event.pageY - document.querySelector('[data-dropzone]').getBoundingClientRect().top;
+    const posX = window.event.pageX - document.querySelector('[data-dropzone]').getBoundingClientRect().left;
 
-    let dropZoneOffsets = document.querySelector('[data-dropzone]').getBoundingClientRect()
-    let clonedElemHeight = clonedElem.getBoundingClientRect().height;
-
-    clonedElem.style.left = `${convertToEm(dropZoneOffsets.left - clonedElemHeight)}em`;
-    clonedElem.style.top = `${convertToEm((window.event.pageY - dropZoneOffsets.top) - clonedElemHeight)}em`;
+    clonedElem.style.left = `${posX}px`;
+    clonedElem.style.top = `${posY}px`;
 }
 
 export function convertToEm(value) {
-    return Math.ceil(value /16)
+    return Math.ceil(value/16)
 }

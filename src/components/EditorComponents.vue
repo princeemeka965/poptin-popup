@@ -20,7 +20,7 @@ function initiateDrag(ev) {
     <!--- Display list of Html Elements that can be dragged to the popup-->
     <div class="my-2 p-2 border border-dashed">
       <div class="w-full">
-        <h1 class="font-bold text-black w-full p-2" @dragstart="initiateDrag($event)" data-text data-header draggable="true">Header</h1>
+        <h1 class="font-bold text-black w-full p-2" @dragstart="initiateDrag($event)" data-text dragged data-header draggable="true">Header</h1>
       </div>
     </div>
 
@@ -30,6 +30,7 @@ function initiateDrag(ev) {
           class="font-bold text-black w-full p-2"
           data-text
           disabled
+          dragged
           draggable="true"
           value="Textfield"
         />
@@ -38,7 +39,7 @@ function initiateDrag(ev) {
 
     <div class="my-2 p-2 border border-dashed">
       <div class="w-full" @dragstart="initiateDrag($event)">
-        <button class="font-bold text-black w-full p-2" data-text draggable="true">Button</button>
+        <button class="font-bold text-black w-full p-2" data-text dragged draggable="true">Button</button>
       </div>
     </div>
 
@@ -49,6 +50,7 @@ function initiateDrag(ev) {
           data-text
           data-select
           disabled
+          dragged
           draggable="true"
         >
           <option selected>Select</option>
@@ -62,6 +64,7 @@ function initiateDrag(ev) {
           class="font-bold text-black w-full p-2"
           data-text
           disabled
+          dragged
           draggable="true"
           value=""
           placeholder="Number"
@@ -76,6 +79,7 @@ function initiateDrag(ev) {
           class="font-bold text-black w-full p-2"
           data-text
           disabled
+          dragged
           draggable="true"
           placeholder="Date Field"
           type="text"
@@ -91,6 +95,7 @@ function initiateDrag(ev) {
           cols="34"
           data-text
           disabled
+          dragged
           draggable="true"
           placeholder="Text Area"
           rows="1"
@@ -105,28 +110,28 @@ function initiateDrag(ev) {
       <div class="flex flex-wrap w-full my-4">
         <div class="p-1 mx-2 flex poptin-editor">
           <div class="w-full" @dragstart="initiateDrag($event)">
-            <div draggable="true" data-text style="color: #000; width: max-content">
+            <div draggable="true" data-text dragged style="color: #000; width: max-content">
               <AnFilledStar class="icons" />
             </div>
           </div>
         </div>
         <div class="p-1 mx-2 flex poptin-editor">
           <div class="w-full" @dragstart="initiateDrag($event)">
-            <div class="min-w-max" draggable="true" data-text>
+            <div class="min-w-max" draggable="true" dragged data-text>
               <BxSolidSearchAlt2 class="icons" />
             </div>
           </div>
         </div>
         <div class="p-1 mx-2 flex poptin-editor">
           <div class="w-full" @dragstart="initiateDrag($event)">
-            <div class="min-w-max" draggable="true" data-text>
+            <div class="min-w-max" draggable="true" dragged data-text>
               <HiSolidInformationCircle class="icons" />
             </div>
           </div>
         </div>
         <div class="p-1 mx-2 flex poptin-editor">
           <div class="w-full" @dragstart="initiateDrag($event)">
-            <div class="min-w-max" draggable="true" data-text>
+            <div class="min-w-max" draggable="true" dragged data-text>
               <IoSharpInformationCircle class="icons" />
             </div>
           </div>
@@ -134,7 +139,7 @@ function initiateDrag(ev) {
 
         <div class="p-1 mx-2 flex poptin-editor">
           <div class="w-full" @dragstart="initiateDrag($event)">
-            <div class="min-w-max" draggable="true" data-text>
+            <div class="min-w-max" draggable="true" dragged data-text>
               <AkBookOpen class="icons" />
             </div>
           </div>
@@ -142,7 +147,7 @@ function initiateDrag(ev) {
 
         <div class="p-1 mx-2 flex poptin-editor">
           <div class="w-full" @dragstart="initiateDrag($event)">
-            <div class="min-w-max" draggable="true" data-text>
+            <div class="min-w-max" draggable="true" dragged data-text>
               <BxSolidBell class="icons" />
             </div>
           </div>
@@ -150,7 +155,7 @@ function initiateDrag(ev) {
 
         <div class="p-1 mx-2 flex poptin-editor">
           <div class="w-full" @dragstart="initiateDrag($event)">
-            <div class="min-w-max" draggable="true" data-text>
+            <div class="min-w-max" draggable="true" dragged data-text>
               <BsCheckCircleFill class="icons" />
             </div>
           </div>
@@ -158,7 +163,7 @@ function initiateDrag(ev) {
 
         <div class="p-1 mx-2 flex poptin-editor">
           <div class="w-full" @dragstart="initiateDrag($event)">
-            <div class="min-w-max" draggable="true" data-text>
+            <div class="min-w-max" draggable="true" dragged data-text>
               <HiSolidMapPin class="icons" />
             </div>
           </div>

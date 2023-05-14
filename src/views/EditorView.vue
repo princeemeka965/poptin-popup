@@ -17,7 +17,7 @@ export default {
     let targetElemPosition = reactive({ value: [] })
 
     onMounted(() => {
-      document.querySelector('[data-dropzone]').addEventListener('click', function () {
+      document.querySelector('[data-dropzone]').addEventListener('click', () => {
         const dropZoneLength = document
           .querySelector('[data-dropzone]')
           .querySelectorAll('[data-text]').length
@@ -49,7 +49,8 @@ export default {
             .querySelector('[data-dropzone]')
             .querySelector('.active')
             .classList.remove('active')
-          closeContext()
+          closeContext();
+          nodeElem.value = null
         }
       })
     })
@@ -60,13 +61,29 @@ export default {
 
     const drop = (event) => {
       event.preventDefault()
+      let clonedElem;
 
-      const clonedElem = draggedElem.value.cloneNode(true)
+      /**
+       * We check if the dragged element is a child of the [data-dropzone] element using the value set in nodeElem ref
+       * This value is set when an element inside the dropzone is clicked
+       * If dragged element is a child of the [data-dropzone] div, we don't clone and append the dragged Element
+       */
 
-      // Append the cloned dragged element to the div
-      document.querySelector('[data-dropzone]').appendChild(clonedElem)
+       // Here the dragged element is not a child of the [data-dropzone] div
+      if (!nodeElem.value) {
+        // we clone the dragged element
+        clonedElem = draggedElem.value.cloneNode(true)
+        // Append the cloned dragged element to the div
+        document.querySelector('[data-dropzone]').appendChild(clonedElem)
+      }
+      else {
+        // Here, the dragged element is a child of the [data-dropzone] div
+        // We set our clonedElem variable to be equal to the nodeElem ref value which is the dragged Element
+        clonedElem = nodeElem.value
+      }
 
-      processDropElem(clonedElem)
+    // Here we process the dragged Element dropped using the processDropElem helper
+     processDropElem(clonedElem)
 
       // check for select Input field
       if (clonedElem.hasAttribute('data-select')) {
@@ -98,6 +115,8 @@ export default {
       const doc = parser.parseFromString(htmlString, 'text/html');
       // Parsed nodes
       const nodes = doc.body;
+
+      window.dialog.showModal();
 
       console.log(nodes)
     }
@@ -190,6 +209,7 @@ export default {
                     width: max-content;
                     position: absolute;
                   "
+                  draggable="true"
                 >
                   <AnFilledStar class="icons" />
                 </div>
@@ -204,6 +224,7 @@ export default {
                     position: absolute;
                     top: 0.3em;
                   "
+                  draggable="true"
                 >
                   <AnFilledStar class="icons" />
                 </div>
@@ -217,6 +238,7 @@ export default {
                     color: rgb(198, 35, 35);
                     width: max-content;
                   "
+                  draggable="true"
                 >
                   <AnFilledStar class="icons" />
                 </div>
@@ -237,6 +259,7 @@ export default {
                     font-size: 27px;
                     position: absolute;
                   "
+                  draggable="true"
                 >
                   <div style="text-align: center">
                     <span style="font-size: inherit; font-weight: inherit; line-height: 1.1em"
@@ -265,6 +288,7 @@ export default {
                     border-style: solid;
                     position: absolute;
                   "
+                  draggable="true"
                 />
 
                 <!--- Button Field Block-->
@@ -272,7 +296,6 @@ export default {
                   class="font-bold text-black w-full p-2"
                   data-text=""
                   tabindex="0"
-                  draggable=""
                   style="
                     top: 16.2rem;
                     left: 5.3rem;
@@ -285,6 +308,7 @@ export default {
                     font-weight: bold;
                     position: absolute;
                   "
+                  draggable="true"
                 >
                   SIGNUP NOW
                 </button>
@@ -296,6 +320,7 @@ export default {
                   data-header=""
                   tabindex="0"
                   contenteditable="true"
+                  draggable="true"
                   style="top: 21.2rem; left: 4.8rem; right: 0rem; width: 21rem; position: absolute"
                 >
                   <div style="text-align: center">
@@ -329,6 +354,15 @@ export default {
       @closeContext="closeContext"
     />
   </div>
+
+
+<dialog id="dialog">
+	<h2>Hello.</h2>
+	<p>A CSS-only modal based on the <a href="https://developer.mozilla.org/es/docs/Web/CSS/::backdrop" target="_blank">::backdrop</a> pseudo-class. Hope you find it helpful.</p>
+	<p>You can also change the styles of the <code>::backdrop</code> from the CSS.</p>
+	<button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+</dialog>
+
 </template>
 
 <style>
@@ -344,5 +378,58 @@ export default {
   word-spacing: -4px;
   letter-spacing: 1px;
   color: #ffffff;
+}
+
+ dialog {
+	 padding: 1rem 3rem;
+	 background: white;
+	 max-width: 400px;
+	 padding-top: 2rem;
+	 border-radius: 20px;
+	 border: 0;
+	 box-shadow: 0 5px 30px 0 #000;
+	 animation: fadeIn 1s ease both;
+}
+ dialog::backdrop {
+	 animation: fadeIn 1s ease both;
+	 background: #000;
+	 z-index: 2;
+	 backdrop-filter: blur(20px);
+}
+ dialog .x {
+	 filter: grayscale(1);
+	 border: none;
+	 background: none;
+	 position: absolute;
+	 top: 15px;
+	 right: 10px;
+	 transition: ease filter, transform 0.3s;
+	 cursor: pointer;
+	 transform-origin: center;
+}
+ dialog .x:hover {
+	 filter: grayscale(0);
+	 transform: scale(1.1);
+}
+ dialog h2 {
+	 font-weight: 600;
+	 font-size: 2rem;
+	 padding-bottom: 1rem;
+}
+ dialog p {
+	 font-size: 1rem;
+	 line-height: 1.3rem;
+	 padding: 0.5rem 0;
+}
+ dialog p a:visited {
+	 color: #000;
+}
+@keyframes fadeIn {
+	 from {
+		 opacity: 0;
+	}
+	 to {
+		 opacity: 1;
+	}
 }
 </style>

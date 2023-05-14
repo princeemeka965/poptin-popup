@@ -136,11 +136,11 @@ button {
 }
 
 [data-dropzone] h1 {
-  cursor: auto !important;
-  width: 20em;
+  width: 7em;
   height: auto;
   left: 5em;
   top: 1em;
+  cursor: all-scroll;
 }
 
 [data-dropzone] textarea {

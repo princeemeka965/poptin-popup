@@ -38,7 +38,7 @@ const insertOptions = () => {
 
 <template>
 <div class="modal fade" :class="props.open ? 'in' : ''" id="myModal--effect-pulse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-body">
                <div class="w-full flex flex-col justify-center p-5">
