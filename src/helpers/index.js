@@ -29,5 +29,5 @@ export function processDropElem(clonedElem) {
 }
 
 export function convertToREM(value) {
-    return Math.ceil(value/16)
+    return Math.ceil(value/20)
 }
