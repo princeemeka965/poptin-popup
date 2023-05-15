@@ -28,7 +28,7 @@ function setDraggedElem(elem) {
         :class="active === 'component' ? 'border-b-2 border-pink-900' : ''"
         @click="currentTab('component')"
       >
-        <span class="text-base" :class="active === 'component' ? 'font-semibold' : ''"
+        <span :class="active === 'component' ? 'font-semibold' : ''"
           >Component</span
         >
       </div>
@@ -38,7 +38,7 @@ function setDraggedElem(elem) {
         :class="active === 'styles' ? 'border-b-2 border-pink-900' : ''"
         @click="currentTab('styles')"
       >
-        <span class="text-base" :class="active === 'styles' ? 'font-semibold' : ''"
+        <span :class="active === 'styles' ? 'font-semibold' : ''"
           >Styles</span
         >
       </div>
@@ -48,7 +48,7 @@ function setDraggedElem(elem) {
         :class="active === 'media' ? 'border-b-2 border-pink-900' : ''"
         @click="currentTab('media')"
       >
-        <span class="text-base" :class="active === 'media' ? 'font-semibold' : ''"
+        <span :class="active === 'media' ? 'font-semibold' : ''"
           >Media</span
         >
       </div>

@@ -1,6 +1,6 @@
 <script setup>
-import { kRange } from 'konsta/vue'
 import dropdown from 'vue-dropdowns'
+import { kRange } from 'konsta/vue';
 import { reactive, ref } from 'vue'
 const props = defineProps({
   activeNode: String
@@ -21,6 +21,8 @@ const positionRight = ref(0)
 const positionTop = ref(0)
 const positionBottom = ref(0)
 const rotation = ref(0)
+const letterSpacing = ref(0)
+const lineHeight = ref(0)
 
 const arrayOfFonts = ref([
   {
@@ -104,7 +106,7 @@ function executeBorderColor(data) {
 }
 function updateFontSize(event) {
   domTarget.value = props.activeNode
-  domTarget.value.style.fontSize = `${parseInt(event.target.value, 10)}px`
+  domTarget.value.style.fontSize = `${parseInt(event.target.value, 10)}rem`
   fontSize.value = parseInt(event.target.value, 10)
 }
 function updateFontWeight(event) {
@@ -116,6 +118,16 @@ function updateFontFamily(data) {
   domTarget.value = props.activeNode
   fontFamily.value = data
   domTarget.value.style.fontFamily = data.name
+}
+function updateLetterSpacing(event) {
+  domTarget.value = props.activeNode
+  domTarget.value.style.letterSpacing = `${parseInt(event.target.value, 10)}rem`
+  letterSpacing.value = parseInt(event.target.value, 10)
+}
+function updateLineHeight(event) {
+  domTarget.value = props.activeNode
+  domTarget.value.style.lineHeight = `${parseInt(event.target.value, 10)}`
+  lineHeight.value = parseInt(event.target.value, 10)
 }
 function updateBorderWidth(event) {
   domTarget.value = props.activeNode
@@ -165,18 +177,19 @@ function updatePositionBottom(event) {
 function updateRotation(event) {
   domTarget.value = props.activeNode
   domTarget.value.style.transform = `rotate(${parseInt(event.target.value, 10)}deg)`;
+  rotation.value = parseInt(event.target.value, 10)
 }
 </script>
 <template>
-  <div class="my-2 p-3">
+  <div class="p-3">
     <div class="w-full flex flex-col my-2 p-1 border border-dashed">
-      <div class="p-1 w-full text-center font-bold text-base text-black">Sizing</div>
+      <div class="p-1 w-full text-center font-bold text-black">Sizing</div>
 
       <!--- Width Div-->
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2">Width</span>
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2">Width</span>
           </div>
         </div>
 
@@ -196,7 +209,7 @@ function updateRotation(event) {
 
           <div class="flex ml-3">
             <div class="flex flex-col justify-center">
-              <span class="text-sm flex text-black">{{ width }} em</span>
+              <span class="lex text-black">{{ width }} rem</span>
             </div>
           </div>
         </div>
@@ -206,7 +219,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2">Height</span>
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2">Height</span>
           </div>
         </div>
 
@@ -226,7 +239,7 @@ function updateRotation(event) {
 
           <div class="flex ml-3">
             <div class="flex flex-col justify-center">
-              <span class="text-sm flex text-black">{{ height }} em</span>
+              <span class="flex text-black">{{ height }} rem</span>
             </div>
           </div>
         </div>
@@ -235,13 +248,13 @@ function updateRotation(event) {
 
     <!---- Typography Block -->
     <div class="w-full flex flex-col my-2 p-1 border border-dashed">
-      <div class="p-1 w-full text-center font-bold text-base text-black">Typography</div>
+      <div class="p-1 w-full text-center font-bold text-black">Typography</div>
 
       <!--- Font Size Div-->
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2">Font Size</span>
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2">Font Size</span>
           </div>
         </div>
 
@@ -251,9 +264,9 @@ function updateRotation(event) {
               <k-range
                 class="text-yellow-900"
                 :value="fontSize"
-                :step="0.1"
-                :min="0"
-                :max="1000"
+                :step="0.01"
+                :min="0.00"
+                :max="10"
                 @input="(e) => updateFontSize(e)"
               />
             </div>
@@ -261,7 +274,7 @@ function updateRotation(event) {
 
           <div class="flex ml-3">
             <div class="flex flex-col justify-center">
-              <span class="text-sm flex text-black">{{ fontSize }} em</span>
+              <span class="flex text-black">{{ fontSize }} rem</span>
             </div>
           </div>
         </div>
@@ -271,7 +284,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Font Weight</span
             >
           </div>
@@ -293,7 +306,7 @@ function updateRotation(event) {
 
           <div class="flex ml-3">
             <div class="flex flex-col justify-center">
-              <span class="text-sm flex text-black">{{ fontWeight }}</span>
+              <span class="flex text-black">{{ fontWeight }}</span>
             </div>
           </div>
         </div>
@@ -303,7 +316,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Letter Spacing</span
             >
           </div>
@@ -325,7 +338,7 @@ function updateRotation(event) {
 
           <div class="flex ml-3">
             <div class="flex flex-col justify-center">
-              <span class="text-sm flex text-black">{{ letterSpacing }} em</span>
+              <span class="flex text-black">{{ letterSpacing }} em</span>
             </div>
           </div>
         </div>
@@ -335,7 +348,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Line Height</span
             >
           </div>
@@ -349,7 +362,7 @@ function updateRotation(event) {
                 :value="lineHeight"
                 :step="0.1"
                 :min="0"
-                :max="2"
+                :max="3"
                 @input="(e) => updateLineHeight(e)"
               />
             </div>
@@ -357,7 +370,7 @@ function updateRotation(event) {
 
           <div class="flex ml-3">
             <div class="flex flex-col justify-center">
-              <span class="text-sm flex text-black">{{ lineHeight }}em</span>
+              <span class="flex text-black">{{ lineHeight }}em</span>
             </div>
           </div>
         </div>
@@ -367,7 +380,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Font Family</span
             >
           </div>
@@ -391,7 +404,7 @@ function updateRotation(event) {
           <div class="flex ml-3">
             <div class="flex flex-col justify-center">
               <span
-                class="h-8 font-bold py-2 px-3 -mt-1 text-black text-sm"
+                class="h-8 font-bold py-2 px-3 -mt-1 text-black"
                 :style="`font-family: ${fontFamily.name} !important`"
               >
                 Poptin</span
@@ -404,7 +417,7 @@ function updateRotation(event) {
 
     <!--- Borders -->
     <div class="w-full flex flex-col my-2 p-1 border border-dashed">
-      <div class="p-1 w-full text-center font-bold text-base text-black">Borders</div>
+      <div class="p-1 w-full text-center font-bold text-black">Borders</div>
 
       <!--- Border Width-->
       <div class="w-full flex flex-col p-1">
@@ -432,7 +445,7 @@ function updateRotation(event) {
 
           <div class="flex ml-3">
             <div class="flex flex-col justify-center">
-              <span class="text-sm flex text-black">{{ borderWidth }} px</span>
+              <span class="flex text-black">{{ borderWidth }} px</span>
             </div>
           </div>
         </div>
@@ -442,7 +455,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Border Radius</span
             >
           </div>
@@ -464,7 +477,7 @@ function updateRotation(event) {
 
           <div class="flex ml-3">
             <div class="flex flex-col justify-center">
-              <span class="text-sm flex text-black">{{ borderRadius }} px</span>
+              <span class="flex text-black">{{ borderRadius }} px</span>
             </div>
           </div>
         </div>
@@ -474,7 +487,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Border Color</span
             >
           </div>
@@ -512,7 +525,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Border Style</span
             >
           </div>
@@ -552,7 +565,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Backgrund Color</span
             >
           </div>
@@ -591,7 +604,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Icon Color</span
             >
           </div>
@@ -628,13 +641,13 @@ function updateRotation(event) {
 
     <!---- Layout -->
     <div class="w-full flex flex-col my-2 p-1 border border-dashed">
-      <div class="p-1 w-full text-center font-bold text-base text-black">Layout</div>
+      <div class="p-1 w-full text-center font-bold text-black">Layout</div>
 
       <!--- Left Positioning -->
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Position Left</span
             >
           </div>
@@ -668,7 +681,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Position Right</span
             >
           </div>
@@ -689,7 +702,7 @@ function updateRotation(event) {
             </div>
             <div class="flex ml-3">
               <div class="flex flex-col justify-center">
-                <span class="text-sm flex text-black">{{ positionRight }} em</span>
+                <span class="flex text-black">{{ positionRight }} em</span>
               </div>
           </div>
         </div>
@@ -699,7 +712,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Position Top</span
             >
           </div>
@@ -720,7 +733,7 @@ function updateRotation(event) {
             </div>
             <div class="flex ml-3">
               <div class="flex flex-col justify-center">
-                <span class="text-sm flex text-black">{{ positionTop }} em</span>
+                <span class="flex text-black">{{ positionTop }} em</span>
               </div>
           </div>
         </div>
@@ -730,7 +743,7 @@ function updateRotation(event) {
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2"
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2"
               >Position Bottom</span
             >
           </div>
@@ -751,7 +764,7 @@ function updateRotation(event) {
             </div>
             <div class="flex ml-3">
               <div class="flex flex-col justify-center">
-                <span class="text-sm flex text-black">{{ positionBottom }} em</span>
+                <span class="flex text-black">{{ positionBottom }} em</span>
               </div>
           </div>
         </div>
@@ -760,13 +773,13 @@ function updateRotation(event) {
 
 
     <div class="w-full flex flex-col my-2 p-1 border border-dashed">
-      <div class="p-1 w-full text-center font-bold text-base text-black">Transform</div>
+      <div class="p-1 w-full text-center font-bold text-black">Transform</div>
 
       <!--- Rotate Div-->
       <div class="w-full flex flex-col p-1">
         <div class="flex w-full">
           <div class="flex">
-            <span class="font-semibold text-sm flex flex-grow text-black ml-2 my-2">Rotate</span>
+            <span class="font-semibold flex flex-grow text-black ml-2 my-2">Rotate</span>
           </div>
         </div>
 
@@ -786,7 +799,7 @@ function updateRotation(event) {
 
           <div class="flex ml-3">
             <div class="flex flex-col justify-center">
-              <span class="text-sm flex text-black">{{ rotation }} deg</span>
+              <span class="flex text-black">{{ rotation }} deg</span>
             </div>
           </div>
         </div>

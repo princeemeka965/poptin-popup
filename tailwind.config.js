@@ -1,7 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-import konstaConfig from 'konsta/config';
 
-export default konstaConfig({
+const konstaConfig = require('konsta/config');
+
+module.exports = konstaConfig({
   purge: ["./src/**/*.vue"],
   theme: {
       screens: {

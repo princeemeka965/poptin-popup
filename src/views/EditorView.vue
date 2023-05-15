@@ -4,16 +4,17 @@ import EditorMenu from '../components/EditorMenu.vue'
 import TextFormatEditor from '../components/TextFormatEditor.vue'
 import SelectModal from '../components/SelectModal.vue'
 import ContextMenu from '../components/ContextMenu.vue'
-import { AnFilledStar } from '@kalimahapps/vue-icons'
 import { processDropElem } from '../helpers'
+import PopupTemplate from '../components/PopupTemplate.vue'
 
 export default {
-  components: { TextFormatEditor, EditorMenu, SelectModal, ContextMenu, AnFilledStar },
+  components: { TextFormatEditor, EditorMenu, SelectModal, ContextMenu, PopupTemplate },
   setup() {
     const draggedElem = ref(null)
     const nodeElem = ref(null)
     const hitSelect = ref(null)
     const contextMenu = ref(false)
+    const createPopUp = ref(false)
     let targetElemPosition = reactive({ value: [] })
 
     onMounted(() => {
@@ -49,10 +50,18 @@ export default {
             .querySelector('[data-dropzone]')
             .querySelector('.active')
             .classList.remove('active')
-          closeContext();
+          closeContext()
           nodeElem.value = null
         }
       })
+
+      /**
+       * Trigger SetInterval to be saving the popup as LOCALSTORAGE
+       */
+
+      setInterval(() => {
+        savePopup()
+      }, 1000)
     })
 
     const allowDrop = (event) => {
@@ -61,7 +70,7 @@ export default {
 
     const drop = (event) => {
       event.preventDefault()
-      let clonedElem;
+      let clonedElem
 
       /**
        * We check if the dragged element is a child of the [data-dropzone] element using the value set in nodeElem ref
@@ -69,21 +78,20 @@ export default {
        * If dragged element is a child of the [data-dropzone] div, we don't clone and append the dragged Element
        */
 
-       // Here the dragged element is not a child of the [data-dropzone] div
+      // Here the dragged element is not a child of the [data-dropzone] div
       if (!nodeElem.value) {
         // we clone the dragged element
         clonedElem = draggedElem.value.cloneNode(true)
         // Append the cloned dragged element to the div
         document.querySelector('[data-dropzone]').appendChild(clonedElem)
-      }
-      else {
+      } else {
         // Here, the dragged element is a child of the [data-dropzone] div
         // We set our clonedElem variable to be equal to the nodeElem ref value which is the dragged Element
         clonedElem = nodeElem.value
       }
 
-    // Here we process the dragged Element dropped using the processDropElem helper
-     processDropElem(clonedElem)
+      // Here we process the dragged Element dropped using the processDropElem helper
+      processDropElem(clonedElem)
 
       // check for select Input field
       if (clonedElem.hasAttribute('data-select')) {
@@ -103,22 +111,26 @@ export default {
     const savePopup = () => {
       // get the innerhtml elements of popupTemplate div
       // this passes the innerhtml elements as string
-      const popupContent = document.getElementById('popupTemplate').innerHTML;
+      const popupContent = document.getElementById('popupTemplate').innerHTML
       // Set it as localStorage
-      localStorage.setItem("popupDom", popupContent);
+      localStorage.setItem('popupDom', popupContent)
     }
 
     const previewPopUp = () => {
       // here we use the DOMParser().parseFromString to parse and convert HTML Strings to DOM nodes
-      const parser = new DOMParser();
-      const htmlString = localStorage.getItem('popupDom');
-      const doc = parser.parseFromString(htmlString, 'text/html');
+      const parser = new DOMParser()
+      const htmlString = localStorage.getItem('popupDom')
+      const doc = parser.parseFromString(htmlString, 'text/html')
       // Parsed nodes
-      const nodes = doc.body;
+      const nodes = doc.body
 
-      window.dialog.showModal();
+      createPopUp.value = true
 
-      console.log(nodes)
+      document.getElementById('dialog').appendChild(nodes)
+    }
+
+    const closeDialog = () => {
+      createPopUp.value = false
     }
 
     return {
@@ -131,7 +143,9 @@ export default {
       targetElemPosition,
       closeContext,
       savePopup,
-      previewPopUp
+      previewPopUp,
+      createPopUp,
+      closeDialog
     }
   }
 }
@@ -141,34 +155,29 @@ export default {
   <div class="w-full flex flex-col">
     <header class="w-full p-5 flex">
       <div class="w-full flex flex-grow">
-      <img src="@/assets/poptin.png" width="100" />
+        <img src="@/assets/poptin.png" width="100" />
       </div>
       <div class="flex">
-      <button
-        style="
-          width: 8rem;
-          text-align: center;
-          padding: 9px 12px;
-          background-color: #f1f1f1;
-          border-radius: 20px;
-          color: #000;
-        "
-        @click="previewPopUp"
-      >
-        Preview
-      </button>
-      <button
-        style="
-          width: 8rem;
-          text-align: center;
-          padding: 9px 12px;
-          border-radius: 20px;
-        "
-        class="bg-yellow-900 text-white mx-5"
-        @click="savePopup"
-      >
-        Save
-      </button>
+        <button
+          style="
+            width: 8rem;
+            text-align: center;
+            padding: 9px 12px;
+            background-color: #f1f1f1;
+            border-radius: 20px;
+            color: #000;
+          "
+          @click="previewPopUp"
+        >
+          Preview
+        </button>
+        <button
+          style="width: 8rem; text-align: center; padding: 9px 12px; border-radius: 20px"
+          class="bg-yellow-900 text-white mx-5"
+          @click="savePopup"
+        >
+          Save
+        </button>
       </div>
     </header>
 
@@ -180,15 +189,14 @@ export default {
 
         <div class="lg:w-2/3 flex w-full flex-col lg:mx-3" style="height: 80vh">
           <text-format-editor :active-node="nodeElem" />
-
           <div
-            class="w-full fixed flex flex-grow border border-dashed justify-center p-5 my-2"
-            style="height: 74vh; width: 58.3%; top: 19%"
+            class="w-full sm:relative flex flex-grow border border-dashed justify-center p-5 my-2"
             id="popupTemplate"
           >
             <div
-              style="width: 530px; height: 530px; border-radius: 50%; background-color: #e55252"
+              style="width: 28rem; height: 28rem; border-radius: 50%; background-color: #e55252"
               class="rounded-full border p-2"
+              data-container
             >
               <div
                 class="w-full h-full border-4 rounded-full"
@@ -197,138 +205,7 @@ export default {
                 @drop="drop($event)"
                 @dragover="allowDrop($event)"
               >
-                <!---- Review Stars Block -->
-                <div
-                  tabindex="0"
-                  data-text
-                  style="
-                    top: 1.4em;
-                    left: 6.1em;
-                    font-size: 29px;
-                    color: rgb(198, 35, 35);
-                    width: max-content;
-                    position: absolute;
-                  "
-                  draggable="true"
-                >
-                  <AnFilledStar class="icons" />
-                </div>
-                <div
-                  tabindex="0"
-                  data-text
-                  style="
-                    left: 6.8em;
-                    font-size: 35px;
-                    color: rgb(198, 35, 35);
-                    width: max-content;
-                    position: absolute;
-                    top: 0.3em;
-                  "
-                  draggable="true"
-                >
-                  <AnFilledStar class="icons" />
-                </div>
-                <div
-                  tabindex="0"
-                  data-text
-                  style="
-                    top: 1.4em;
-                    left: 10.4em;
-                    font-size: 29px;
-                    color: rgb(198, 35, 35);
-                    width: max-content;
-                  "
-                  draggable="true"
-                >
-                  <AnFilledStar class="icons" />
-                </div>
-
-                <!--- Text Block -->
-                <h3
-                  class="font-bold text-black w-full p-2"
-                  data-text=""
-                  data-header=""
-                  tabindex="0"
-                  contenteditable=""
-                  style="
-                    top: 5rem;
-                    left: 4.5rem;
-                    right: 0rem;
-                    width: 23rem;
-                    height: auto;
-                    font-size: 27px;
-                    position: absolute;
-                  "
-                  draggable="true"
-                >
-                  <div style="text-align: center">
-                    <span style="font-size: inherit; font-weight: inherit; line-height: 1.1em"
-                      ><font color="#ffffff" style="font-weight: bold"
-                        >All the texts and elements in this popup should be editable and
-                        dragable</font
-                      ></span
-                    >
-                  </div>
-                </h3>
-
-                <!--- Input Field Block-->
-                <input
-                  class="font-bold text-black w-full p-2 active"
-                  data-text=""
-                  tabindex="0"
-                  placeholder="E-mail"
-                  value=""
-                  style="
-                    top: 12.2rem;
-                    left: 5.3rem;
-                    width: 21rem;
-                    height: 3rem;
-                    border-radius: 11px;
-                    border-width: 2px;
-                    border-style: solid;
-                    position: absolute;
-                  "
-                  draggable="true"
-                />
-
-                <!--- Button Field Block-->
-                <button
-                  class="font-bold text-black w-full p-2"
-                  data-text=""
-                  tabindex="0"
-                  style="
-                    top: 16.2rem;
-                    left: 5.3rem;
-                    width: 21rem;
-                    background-color: rgb(15, 15, 15);
-                    height: 3.5rem;
-                    border-radius: 13px;
-                    color: rgb(255, 255, 255);
-                    font-size: 1.5em;
-                    font-weight: bold;
-                    position: absolute;
-                  "
-                  draggable="true"
-                >
-                  SIGNUP NOW
-                </button>
-
-                <!--- Text Block -->
-                <h1
-                  class="font-bold text-black w-full p-2"
-                  data-text=""
-                  data-header=""
-                  tabindex="0"
-                  contenteditable="true"
-                  draggable="true"
-                  style="top: 21.2rem; left: 4.8rem; right: 0rem; width: 21rem; position: absolute"
-                >
-                  <div style="text-align: center">
-                    <span style="font-size: inherit; font-weight: inherit; line-height: 1.1em"
-                      ><font color="#ffffff">No credit card required. No surprises</font></span
-                    >
-                  </div>
-                </h1>
+                <popup-template />
               </div>
             </div>
           </div>
@@ -355,14 +232,10 @@ export default {
     />
   </div>
 
-
-<dialog id="dialog">
-	<h2>Hello.</h2>
-	<p>A CSS-only modal based on the <a href="https://developer.mozilla.org/es/docs/Web/CSS/::backdrop" target="_blank">::backdrop</a> pseudo-class. Hope you find it helpful.</p>
-	<p>You can also change the styles of the <code>::backdrop</code> from the CSS.</p>
-	<button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
-</dialog>
-
+  <!-- Modal to view Popup after creating-->
+  <div :class="createPopUp ? 'dialog' : 'hidden'" id="dialog">
+    <button @click="closeDialog()" aria-label="close" class="x">❌</button>
+  </div>
 </template>
 
 <style>
@@ -380,56 +253,80 @@ export default {
   color: #ffffff;
 }
 
- dialog {
-	 padding: 1rem 3rem;
-	 background: white;
-	 max-width: 400px;
-	 padding-top: 2rem;
-	 border-radius: 20px;
-	 border: 0;
-	 box-shadow: 0 5px 30px 0 #000;
-	 animation: fadeIn 1s ease both;
+.dialog body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
 }
- dialog::backdrop {
-	 animation: fadeIn 1s ease both;
-	 background: #000;
-	 z-index: 2;
-	 backdrop-filter: blur(20px);
+
+.dialog {
+  border-radius: 20px;
+  border: 0;
+  animation: fadeIn 1s ease both;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: 100%;
 }
- dialog .x {
-	 filter: grayscale(1);
-	 border: none;
-	 background: none;
-	 position: absolute;
-	 top: 15px;
-	 right: 10px;
-	 transition: ease filter, transform 0.3s;
-	 cursor: pointer;
-	 transform-origin: center;
+.dialog::backdrop {
+  animation: fadeIn 1s ease both;
+  background: #000;
+  z-index: 2;
+  backdrop-filter: blur(20px);
 }
- dialog .x:hover {
-	 filter: grayscale(0);
-	 transform: scale(1.1);
+.dialog [data-container] {
+  top: -100vw;
+  animation: slider 1s ease both;
 }
- dialog h2 {
-	 font-weight: 600;
-	 font-size: 2rem;
-	 padding-bottom: 1rem;
+.dialog .x {
+  filter: grayscale(1);
+  border: none;
+  background: none;
+  position: absolute;
+  z-index: 9;
+  top: 15px;
+  right: 10px;
+  transition: ease filter, transform 0.3s;
+  cursor: pointer;
+  transform-origin: center;
 }
- dialog p {
-	 font-size: 1rem;
-	 line-height: 1.3rem;
-	 padding: 0.5rem 0;
+.dialog .x:hover {
+  filter: grayscale(0);
+  transform: scale(1.1);
 }
- dialog p a:visited {
-	 color: #000;
+.dialog h2 {
+  font-weight: 600;
+  font-size: 2rem;
+  padding-bottom: 1rem;
+}
+.dialog p {
+  font-size: 1rem;
+  line-height: 1.3rem;
+  padding: 0.5rem 0;
+}
+.dialog p a:visited {
+  color: #000;
 }
 @keyframes fadeIn {
-	 from {
-		 opacity: 0;
-	}
-	 to {
-		 opacity: 1;
-	}
+  from {
+    opacity: 0;
+    top: 0;
+  }
+  to {
+    opacity: 1;
+    top: 1;
+  }
+}
+@keyframes slider {
+  from {
+    top: -100vw;
+  }
+  to {
+    top: 5vw;
+  }
 }
 </style>

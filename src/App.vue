@@ -12,4 +12,3 @@ import { kApp, kPage, kBlock } from 'konsta/vue';
     </k-page>
   </k-app>
 </template>
-

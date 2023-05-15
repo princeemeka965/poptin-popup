@@ -24,10 +24,10 @@ export function processDropElem(clonedElem) {
     const posY = window.event.pageY - document.querySelector('[data-dropzone]').getBoundingClientRect().top;
     const posX = window.event.pageX - document.querySelector('[data-dropzone]').getBoundingClientRect().left;
 
-    clonedElem.style.left = `${posX}px`;
-    clonedElem.style.top = `${posY}px`;
+    clonedElem.style.left = `${convertToREM(posX)}rem`;
+    clonedElem.style.top = `${convertToREM(posY)}rem`;
 }
 
-export function convertToEm(value) {
+export function convertToREM(value) {
     return Math.ceil(value/16)
 }
